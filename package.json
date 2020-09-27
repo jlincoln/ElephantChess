@@ -36,6 +36,6 @@
   "author": "jlincoln",
   "license": "",
   "engines": {
-    "node": "^12.18"
+    "node": "12.18.3"
   }
 }
