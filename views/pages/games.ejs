@@ -1,0 +1,74 @@
+<div id="games" v-cloak>
+
+  <div id="page-wrap">
+    <div class="container">
+      <div class="page-header text-center">
+        <h1>Games</h1>
+        <h3>Create and continue playing games.</h3>
+        <div class="header-buttons">
+          <button class="btn btn-outline-primary" @click="openCreateGameForm()">New Game</button>
+        </div>
+      </div>
+      <div class="listings" v-if="games.length > 0">
+        <div class="card" :key="'game'+game.id" v-for="game in games">
+          <span>{{game.name}}</span>
+          <board :name="game.name" free="false" :fen="game.fen" orientation="white" showThreats="false"></board>
+          <div class="card-options">
+            <span class="options-button" data-toggle="tooltip" data-placement="top" title="Resign" @click="resignGame(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
+            <!--
+            <span class="options-button" data-toggle="tooltip" data-placement="top" title="Show Threats" @click="showThreats(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
+            -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <small purpose="footer-copy">Elephant Chess Piece Icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></small>
+    </div>
+  </div>
+
+  <% /* "Create Game" modal */ %>
+  <modal v-if="creatingGame" v-cloak key="new" @close="closeCreateGameForm()">
+    <div class="modal-header">
+      <h5 class="modal-title">Create Game</h5>
+    </div>
+    <ajax-form action="createGame" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{name: newGameDef.name, side: newGameDef.side, opponent: newGameDef.opponent, timeLimit: newGameDef.timeLimit}" @submitted="submittedCreateGameForm($event)" v-if="!createGameFormSuccess">
+      <div class="modal-body">
+        <div class="item-preview d-flex justify-content-center">
+        </div>
+        <div class="form-group mt-4">
+          <div class="form-group">
+            <label>Opponent:</label>
+            <select v-model="newGameDef.opponent">
+              <option v-for="opponent in opponents" v-bind:value="opponent.id">{{opponent.name}}</option>
+            </select>
+            <br>
+            <label>Side:</label>
+            <input type="radio" id="white" checked name="side" value="white" v-model="newGameDef.side">
+            <label for="white">White</label>
+            <input type="radio" id="black" name="side" value="black" v-model="newGameDef.side">
+            <label for="black">Black</label>
+            <br>
+            <label for="enableTimeLime">Time Limit (hours):</label>
+            <input type="checkbox" id="enableTimeLimit" name="enableTimeLimit" v-model="newGameDef.enableTimeLimit">
+            <input v-if="newGameDef.enableTimeLimit" type="number" min="1" max="8760" id="timeLimit" name="timeLimit" v-model="newGameDef.timeLimit">
+            <br>
+            <label for="name">Name:<label>
+            <input type="text" id="name" name="name" v-model="newGameDef.name" placeholder="Name your new game">
+          </div>
+        </div>
+        <p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/support">contact support</a> if the error persists.</small></p>
+      </div>
+      <div class="modal-footer  flex-row-reverse justify-content-start">
+        <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1">Play</ajax-button>
+        <button data-dismiss="modal" class="btn btn-outline-primary mr-1">Cancel</button>
+      </div>
+    </ajax-form>
+    <div class="modal-footer" v-if="createGameFormSuccess">
+      <button data-dismiss="modal" class="btn btn-outline-success">Game Created</button>
+    </div>
+  </modal>
+  <% /* "End Create Game" modal */ %>
+
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
