@@ -34,6 +34,7 @@ module.exports = {
 
     // Respond with view.
     return {
+      currentSection: 'games',
       games: games,
     };
 

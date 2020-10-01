@@ -1,30 +1,32 @@
 <div id="games" v-cloak>
 
-  <div id="page-wrap">
-    <div class="container">
-      <div class="page-header text-center">
-        <h1>Games</h1>
-        <h3>Create and continue playing games.</h3>
-        <div class="header-buttons">
-          <button class="btn btn-outline-primary" @click="openCreateGameForm()">New Game</button>
-        </div>
+  <div class="container">
+    <div class="page-header text-center">
+      <h1>Games</h1>
+      <p>Create and continue playing games.</p>
+      <div class="header-buttons">
+        <button class="btn btn-outline-primary" @click="openCreateGameForm()">New Game</button>
       </div>
-      <div class="listings" v-if="games.length > 0">
-        <div class="card" :key="'game'+game.id" v-for="game in games">
-          <span>{{game.name}}</span>
-          <board :name="game.name" free="false" :fen="game.fen" orientation="white" showThreats="false"></board>
-          <div class="card-options">
-            <span class="options-button" data-toggle="tooltip" data-placement="top" title="Resign" @click="resignGame(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
-            <!--
-            <span class="options-button" data-toggle="tooltip" data-placement="top" title="Show Threats" @click="showThreats(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
-            -->
-          </div>
+      <br>
+    </div>
+    <div class="listings" v-if="games.length > 0">
+      <div class="card" :key="'game'+game.id" v-for="game in games">
+        <span>{{game.name}}</span>
+        <board :name="game.name" free="false" :fen="game.fen" orientation="white" showThreats="false"></board>
+        <div class="card-options">
+          <span class="options-button" data-toggle="tooltip" data-placement="top" title="Resign" @click="resignGame(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
+          <!--
+          <span class="options-button" data-toggle="tooltip" data-placement="top" title="Show Threats" @click="showThreats(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
+          -->
         </div>
       </div>
     </div>
-    <div class="footer">
-      <small purpose="footer-copy">Elephant Chess Piece Icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></small>
+    <div class="empty text-center" v-else>
+      <p>You do not have any active games at this time. Create a <a @click="openCreateGameForm()">New Game</a> to get started.</p>
     </div>
+  </div>
+  <div class="footer">
+    <small purpose="footer-copy">Elephant Chess Piece Icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></small>
   </div>
 
   <% /* "Create Game" modal */ %>

@@ -51,6 +51,7 @@ parasails.registerPage('games', {
 
     closeCreateGameForm: function() {
       this.creatingGame = false;
+      // this.goto('/games');
     },
 
     openCreateGameForm: function() {
@@ -79,11 +80,12 @@ parasails.registerPage('games', {
     },
 
     submittedCreateGameForm(event) {
-      // this.creatingGame = false;
-      // this.createGameFormSuccess = true;
+      this.creatingGame = false;
+      this.createGameFormSuccess = true;
       // add new game to page
       // sails.log.info('submittedCreateGameForm event is ', event);
       // this.games.unshift({name: "new game", fen: ""});
+      this.goto('games');
       return;
     },
 

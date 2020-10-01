@@ -46,13 +46,13 @@
   </head>
   <body>
     <div purpose="page-wrap">
-      <header class="navbar navbar-expand-sm navbar-dark bg-dark flex-column flex-md-row justify-content-between" purpose="page-header">
-        <a style="cursor: pointer;" class="navbar-brand mr-0" href="/"><img style="height: 20px;" class="logo" alt="Elephant Chess Logo" src="/images/elephantchesslogo.png"/></a>
+      <header id="page-header" class="navbar navbar-expand-sm flex-column flex-md-row justify-content-between" purpose="page-header">
+        <a style="cursor: pointer;" class="navbar-brand mr-0" href="/"><img style="height: 30px;" class="logo" alt="Elephant Chess Logo" src="/images/elephantchesslogo.png"/></a>
         <div class="navbar-nav flex-row">
           <!-- LOGGED-IN NAVIGATION -->
           <% if(me) { %>
-          <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/games">Games</a>
-          <a class="nav-item nav-link ml-2 ml-md-0 mr-2 mr-md-0" href="/contact">Help</a>
+          <a class="nav-item nav-link ml-2 ml-md-0 mr-2 mr-md-0 <%= typeof currentSection !== 'undefined' && currentSection === 'games' ? 'current' : '' %>" href="/games">Games</a>
+          <a class="nav-item nav-link ml-2 ml-md-0 mr-2 mr-md-0 <%= typeof currentSection !== 'undefined' && currentSection === 'help' ? 'current' : '' %>" href="/contact">Help</a>
           <!-- Only in desktop nav -->
           <div class="nav-item dropdown d-none d-sm-block">
             <a class="nav-link dropdown-toggle" id="header-account-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
