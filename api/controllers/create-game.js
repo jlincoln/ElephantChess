@@ -1,11 +1,8 @@
 module.exports = {
 
-
   friendlyName: 'Create game',
 
-
   description: 'Create a game',
-
 
   inputs: {
     name: {
@@ -14,11 +11,9 @@ module.exports = {
     }
   },
 
-
   exits: {
 
   },
-
 
   fn: async function (inputs) {
 
