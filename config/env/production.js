@@ -374,7 +374,7 @@ module.exports = {
   *                                                                         *
   ***************************************************************************/
   custom: {
-    baseUrl: 'http://nodetest1-env.eba-cix5yirt.us-east-1.elasticbeanstalk.com',
+    baseUrl: 'http://elephantchess-env.eba-bezivni9.us-east-1.elasticbeanstalk.com/',
     internalEmailAddress: 'support@example.com',
 
     // sendgridSecret: 'SG.fake.3e0Bn0qSQVnwb1E4qNPz9JZP5vLZYqjh7sn8S93oSHU',
