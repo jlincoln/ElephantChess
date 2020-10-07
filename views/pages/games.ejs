@@ -25,9 +25,6 @@
       <p>You do not have any active games at this time. Create a <a @click="openCreateGameForm()">New Game</a> to get started.</p>
     </div>
   </div>
-  <div class="footer">
-    <small purpose="footer-copy">Elephant Chess Piece Icon made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></small>
-  </div>
 
   <% /* "Create Game" modal */ %>
   <modal v-if="creatingGame" v-cloak key="new" @close="closeCreateGameForm()">

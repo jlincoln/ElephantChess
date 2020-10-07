@@ -24,7 +24,7 @@ parasails.registerPage('homepage', {
     clickHeroButton: async function() {
       // Scroll to the 'get started' section:
       $('html, body').animate({
-        scrollTop: this.$find('[purpose="scroll-destination"]').offset().top
+        scrollTop: this.$find('[purpose="more-info-text"]').offset().top
       }, 500);
     },
 
