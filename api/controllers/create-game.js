@@ -18,7 +18,7 @@ module.exports = {
   fn: async function (inputs) {
 
     // All done.
-    sails.log.info('create-game called');
+    sails.log.info('create-game');
     sails.log.info('inputs is ', inputs);
     var game = await Game.create(inputs);
     return game;

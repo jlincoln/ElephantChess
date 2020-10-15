@@ -35,8 +35,13 @@ parasails.registerComponent('board', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
     <div :name="'board-component-div:' + (name||'')">
-      <chessboard :name="(name||'')" :free="(free === 'true')" :orientation="(orientation||'')" :showThreats="(showThreats === 'true')" :fen="(fen||'')" @onMove="onMove" @onPromption="onPromotion(data)">
+      <chessboard :name="(name||'')" :free="(free === 'true')" :orientation="(orientation||'')" :showThreats="(showThreats === 'true')" fen="rnbqkbnr/pp1ppppp/8/2e5/8/8/PPP1PPPP/RNBQKBNR w KQkq - 0 1" @onMove="onMove" @onPromption="onPromotion(data)">
       </chessboard>
+      <div>
+        <span>Hello</span>
+        {{this.positionInfo}}
+        {{this.currentFen}}
+      </div>
      </div>
   `,
 
