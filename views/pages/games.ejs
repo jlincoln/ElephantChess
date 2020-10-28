@@ -12,7 +12,7 @@
     <div class="listings" v-if="games.length > 0">
       <div class="card" :key="'game'+game.id" v-for="game in games">
         <span>Game Name: {{game.name}}</span>
-        <board :name="game.name" free="false" fen="" orientation="white" showThreats="false"></board>
+        <board :name="game.name" free="false" :fen="game.currentFEN" orientation="white" show-threats="false"></board>
         <div class="card-options">
           <span class="options-button" data-toggle="tooltip" data-placement="top" title="Resign" @click="resignGame(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
           <!--
@@ -63,6 +63,9 @@
         <button data-dismiss="modal" class="btn btn-outline-primary mr-1">Cancel</button>
       </div>
     </ajax-form>
+    <noscript>
+      <strong>We're sorry but Elephant Chess games don't work without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
     <div class="modal-footer" v-if="createGameFormSuccess">
       <button data-dismiss="modal" class="btn btn-outline-success">Game Created</button>
     </div>

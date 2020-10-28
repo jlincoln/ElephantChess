@@ -5,7 +5,6 @@
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
-    "@jlincoln/echess.js": "0.0.1",
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/lodash": "^3.10.3",
     "@sailshq/socket.io-redis": "^5.2.0",
@@ -15,7 +14,7 @@
     "sails-hook-organics": "^2.0.0",
     "sails-hook-orm": "^2.1.1",
     "sails-hook-sockets": "^2.0.0",
-    "vue-chessboard": "^0.6.7"
+    "vue-echessboard": "^0.0.11"
   },
   "devDependencies": {
     "eslint": "5.16.0",

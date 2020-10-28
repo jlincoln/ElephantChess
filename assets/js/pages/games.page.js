@@ -16,6 +16,7 @@ parasails.registerPage('games', {
       enableTimeLimit: undefined,
       timeLimit: undefined,
     },
+    fen: "",
     opponents: [
       {id: 1, name: 'Jason'},
       {id: 2, name: 'Christine'},
@@ -76,6 +77,10 @@ parasails.registerPage('games', {
     },
 
     showThreats: function() {
+      return;
+    },
+
+    show: function() {
       return;
     },
 

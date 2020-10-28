@@ -26,7 +26,7 @@ parasails.registerComponent('board', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function (){
     return {
-      //…
+      currentFen: this.fen
     };
   },
 
@@ -35,12 +35,13 @@ parasails.registerComponent('board', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
     <div :name="'board-component-div:' + (name||'')">
-      <chessboard :name="(name||'')" :free="(free === 'true')" :orientation="(orientation||'')" :showThreats="(showThreats === 'true')" fen="rnbqkbnr/pp1ppppp/8/2e5/8/8/PPP1PPPP/RNBQKBNR w KQkq - 0 1" @onMove="onMove" @onPromption="onPromotion(data)">
-      </chessboard>
+      <echessboard :name="(name||'')" :free="(free === 'true')" :orientation="(orientation||'')" :show-threats="(showThreats === 'true')" :fen="currentFen" @onMove="onMove" @onPromption="onPromotion(data)">
+      </echessboard>
       <div>
-        <span>Hello</span>
-        {{this.positionInfo}}
-        {{this.currentFen}}
+        <label>
+          FEN
+          <input type="text" name="fen" v-model="currentFen" size="50">
+        </label>
       </div>
      </div>
   `,
@@ -65,6 +66,7 @@ parasails.registerComponent('board', {
 
     onMove: async function(data){
       console.log('onMove(data): data is ' + JSON.stringify(data));
+      this.currentFen = data["fen"];
     },
 
     onPromotion: async function(data){
