@@ -15,9 +15,7 @@
         <board :name="game.name" free="false" :fen="game.currentFEN" orientation="white" show-threats="false"></board>
         <div class="card-options">
           <span class="options-button" data-toggle="tooltip" data-placement="top" title="Resign" @click="resignGame(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
-          <!--
-          <span class="options-button" data-toggle="tooltip" data-placement="top" title="Show Threats" @click="showThreats(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
-          -->
+          <span class="options-button" data-toggle="tooltip" data-placement="top" title="Elephant" @click="showThreats(game.id)"><span class="piece.black.elephant"></span></span>
         </div>
       </div>
     </div>
