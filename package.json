@@ -10,15 +10,15 @@
     "sails-hook-apianalytics": "^2.0.3",
     "sails-hook-organics": "^2.0.0",
     "sails-hook-orm": "^2.1.1",
-    "sails-hook-sockets": "^2.0.0"
+    "sails-hook-sockets": "^2.0.0",
+    "grunt": "1.0.4",
+    "sails-hook-grunt": "^4.0.0"
   },
   "devDependencies": {
     "@vue/cli": "^4.5.6",
     "eslint": "5.16.0",
     "htmlhint": "0.11.0",
     "lesshint": "6.3.6",
-    "grunt": "1.0.4",
-    "sails-hook-grunt": "^4.0.0",
     "vue-echessboard": "^0.0.11",
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/socket.io-redis": "^5.2.0"
