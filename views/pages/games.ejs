@@ -12,7 +12,7 @@
     <div class="listings" v-if="games.length > 0">
       <div class="card" :key="'game'+game.id" v-for="game in games">
         <span>Game Name: {{game.name}}</span>
-        <board :name="game.name" free="false" :fen="game.currentFEN" orientation="white" show-threats="false"></board>
+        <board :id="game.id" :name="game.name" free="false" :fen="game.currentFEN" orientation="white" show-threats="false"></board>
         <div class="card-options">
           <span class="options-button" data-toggle="tooltip" data-placement="top" title="Resign" @click="resignGame(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
           <span class="options-button" data-toggle="tooltip" data-placement="top" title="Elephant" @click="showThreats(game.id)"><span class="piece.black.elephant"></span></span>
@@ -31,29 +31,51 @@
     </div>
     <ajax-form action="createGame" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{name: newGameDef.name, side: newGameDef.side, opponent: newGameDef.opponent, timeLimit: newGameDef.timeLimit}" @submitted="submittedCreateGameForm($event)" v-if="!createGameFormSuccess">
       <div class="modal-body">
-        <div class="item-preview d-flex justify-content-center">
-        </div>
-        <div class="form-group mt-4">
-          <div class="form-group">
-            <label>Opponent:</label>
-            <select v-model="newGameDef.opponent">
-              <option v-for="opponent in opponents" v-bind:value="opponent.id">{{opponent.name}}</option>
-            </select>
-            <br>
-            <label>Side:</label>
-            <input type="radio" id="white" checked name="side" value="white" v-model="newGameDef.side">
-            <label for="white">White</label>
-            <input type="radio" id="black" name="side" value="black" v-model="newGameDef.side">
-            <label for="black">Black</label>
-            <br>
-            <label for="enableTimeLime">Time Limit (hours):</label>
-            <input type="checkbox" id="enableTimeLimit" name="enableTimeLimit" v-model="newGameDef.enableTimeLimit">
-            <input v-if="newGameDef.enableTimeLimit" type="number" min="1" max="8760" id="timeLimit" name="timeLimit" v-model="newGameDef.timeLimit">
-            <br>
-            <label for="name">Name:<label>
-            <input type="text" id="name" name="name" v-model="newGameDef.name" placeholder="Name your new game">
+        <label class="">
+          Opponent:
+          <select id="opponent" v-model="newGameDef.opponent" class="" required>
+            <option v-for="opponent in opponents" v-bind:value="opponent.id">{{opponent.name}}</option>
+          </select>
+        </label>
+        <br>
+        <label>
+          Type:
+          <div class="radio-inline">
+            <label>
+              <input type="radio" id="domination" checked class="" name="mode" value="domination" v-model="newGameDef.mode">
+              Domination
+            </label>
+            <label>
+              <input type="radio" id="catch_and_release" class="" name="mode" value="catch_and_release" v-model="newGameDef.mode">
+              Catch and Release
+            </label>
           </div>
-        </div>
+        </label>
+        <br>
+        <label>
+          Side:
+          <div class="radio-inline">
+            <label>
+              <input type="radio" id="white" class="" checked name="side" value="white" v-model="newGameDef.side">
+              White
+            </label>
+            <label>
+              <input type="radio" id="black" class="" name="side" value="black" v-model="newGameDef.side">
+              Black
+            </label>
+          </div>
+        </label>
+        <br>
+        <label>
+          Time Limit (hours):
+          <div class="checkbox">
+            <input type="checkbox" id="enableTimeLimit" name="enableTimeLimit" v-model="newGameDef.enableTimeLimit">
+            <input v-if="newGameDef.enableTimeLimit" type="number" min="1" max="336" id="timeLimit" name="timeLimit" v-model="newGameDef.timeLimit" value="1">
+          </div>
+        </label>
+        <br>
+        <label for="name" class="">Name:<label>
+        <input type="text" id="name" class="" name="name" v-model="newGameDef.name" placeholder="Name your new game">
         <p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/support">contact support</a> if the error persists.</small></p>
       </div>
       <div class="modal-footer  flex-row-reverse justify-content-start">

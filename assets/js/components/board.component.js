@@ -14,6 +14,7 @@ parasails.registerComponent('board', {
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
   props: [
+    'id',
     'name',
     'free',
     'orientation',
@@ -64,9 +65,15 @@ parasails.registerComponent('board', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
 
-    onMove: async function(data){
+    onMove: async function(data) {
       console.log('onMove(data): data is ' + JSON.stringify(data));
-      this.currentFen = data["fen"];
+      this.currentFen = data['fen'];
+      io.socket.post(
+        '/api/v1/game/' + this.id + '/move',
+        { fen: this.currentFen, _csrf: window.SAILS_LOCALS._csrf },
+        function (resData, jwRes) {
+          console.log('resData is ' + JSON.stringify(resData));
+        });
     },
 
     onPromotion: async function(data){

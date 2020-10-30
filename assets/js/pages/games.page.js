@@ -12,6 +12,7 @@ parasails.registerPage('games', {
     newGameDef: {
       name: undefined,
       side: 'white',
+      mode: 'domination',
       opponent: undefined,
       enableTimeLimit: undefined,
       timeLimit: undefined,
@@ -61,7 +62,7 @@ parasails.registerPage('games', {
       return;
     },
 
-    handleParsingCreateGameForm: function() {
+    handleParsingCreateGameForm: function(argins) {
       // TODO: Is this needed for anything?
       // Clear out any pre-existing error messages.
       this.formErrors = {};
@@ -72,7 +73,7 @@ parasails.registerPage('games', {
     resignGame: function(gameId) {
       console.log('resignGame called');
       let game = _.find(this.games, {id: gameId});
-      game.name = "Resigned";
+      game.name = 'Resigned';
       return;
     },
 
@@ -87,8 +88,8 @@ parasails.registerPage('games', {
     submittedCreateGameForm(event) {
       this.creatingGame = false;
       this.createGameFormSuccess = true;
+      // console.log('submittedCreateGameForm event is ', event);
       // add new game to page
-      // sails.log.info('submittedCreateGameForm event is ', event);
       // this.games.unshift({name: "new game", fen: ""});
       this.goto('games');
       return;

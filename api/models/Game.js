@@ -25,6 +25,16 @@ module.exports = {
       type: 'json'
     },
 
+    mode: {
+      type: 'string',
+      description: 'Game play mode (domination or create_and_release)'
+    },
+
+    timeLimit: {
+      type: 'number',
+      description: 'game time limit'
+    },
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
