@@ -20,7 +20,8 @@ parasails.registerComponent('board', {
     'orientation',
     'showThreats',
     'fen',
-    'userSide'
+    'userSide',
+    'opponent'
   ],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -38,6 +39,16 @@ parasails.registerComponent('board', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
     <div :name="'board-component-div:' + (name||'')">
+      <label>
+        I am playing against <strong>{{ opponent }}</strong> / I am {{ userSide }} / It is {{ activeColor }}'s turn
+        <br>
+        <span>
+          <button @click="toggleOrientation" title="toggle board orientation">
+            <span>&#8645;</span>
+          </button>
+        </span>
+      </label>
+      <br>
       <echessboard
         :name="(name||'')"
         ref="echessboard"
@@ -50,20 +61,8 @@ parasails.registerComponent('board', {
       </echessboard>
       <div>
         <label>
-          FEN:
           <input type="text" name="fen" v-model="currentFen" size="50">
         </label>
-        <label>
-          Turn: {{ activeColor }}
-        </label>
-        <br>
-        <label>
-          My Side: {{ userSide }}
-        </label>
-        <br>
-        <button @click="changeOrientation">
-          Change Orientation
-        </button>
       </div>
      </div>
   `,
@@ -76,11 +75,6 @@ parasails.registerComponent('board', {
   },
   mounted: async function(){
     console.log('mounted: need to set board non mutable if user is not the activeColor');
-    // if (this.$refs.echessboard.board.state.movable.color !== undefined
-    // && this.$refs.echessboard.board.state.movable.color !== ''
-    // && this.$refs.echessboard.board.state.movable.color !== this.userSide) {
-      // this.$refs.echessboard.board.state.movable.color = '';
-    // }
   },
   beforeDestroy: function() {
     //…
@@ -111,12 +105,11 @@ parasails.registerComponent('board', {
       }
     },
 
-    onPromotion: function(data){
+    onPromotion: function(){
       // console.log('onPromotion(data): data is ' + JSON.stringify(data));
     },
 
-    changeOrientation: function(data){
-      // console.log('changeOrientation(data): data is ' + JSON.stringify(data));
+    toggleOrientation: function(){
       this.$refs.echessboard.board.toggleOrientation();
     },
 

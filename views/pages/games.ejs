@@ -19,7 +19,8 @@
           :fen="game.currentFEN"
           :orientation="game.userSide"
           show-threats="false"
-          :user-side="game.userSide">
+          :user-side="game.userSide"
+          :opponent="game.opponent">
         </board>
         <div class="card-options">
           <span class="options-button" data-placement="top" title="Resign" @click="resignGame(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>

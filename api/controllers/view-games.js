@@ -1,11 +1,8 @@
 module.exports = {
 
-
   friendlyName: 'Chess Games',
 
-
   description: 'Display "Chess games" page.',
-
 
   exits: {
 
@@ -15,7 +12,6 @@ module.exports = {
 
   },
 
-
   fn: async function () {
 
     // Get the list of things this user can see.
@@ -24,8 +20,10 @@ module.exports = {
         { white: this.req.session.userId },
         { black: this.req.session.userId }
       ]
-    });
-  
+    })
+    .populate('white')
+    .populate('black');
+ 
     var opponents = await User.find({
       id: {'!=': this.req.session.userId}
     });
@@ -34,13 +32,20 @@ module.exports = {
       opponents[index] = _.pick(opponent, ['id', 'fullName']);
     });
 
-    // set activeColor attribute based upoon segment 2 of FEN
+    // set activeColor attribute based upon segment 2 of FEN
     _.each(games, (game, index) => {
-      games[index].activeColor = game.currentFEN.split(" ")[1];
-      sails.log(`this.req.session.userId is ${this.req.session.userId}`);
-      sails.log(`game.white is ${game.white}`);
-      sails.log(`game.black is ${game.black}`);
-      (game.white === this.req.session.userId) ? games[index].userSide = "white" : games[index].userSide = "black";
+      games[index].activeColor = game.currentFEN.split(' ')[1];
+      if (game.white.id === this.req.session.userId) {
+        games[index].userSide = 'white';
+        games[index].opponent = game.black.fullName;
+        delete games[index].black;
+        delete games[index].white;
+      } else {
+        games[index].userSide = 'black';
+        games[index].opponent = game.white.fullName;
+        delete games[index].black;
+        delete games[index].white;
+      }
     });
 
     sails.log(JSON.stringify(games));
