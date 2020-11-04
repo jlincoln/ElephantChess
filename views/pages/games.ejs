@@ -14,8 +14,7 @@
         <span>Game Name: {{game.name}}</span>
         <board :id="game.id" :name="game.name" free="false" :fen="game.currentFEN" orientation="white" show-threats="false"></board>
         <div class="card-options">
-          <span class="options-button" data-toggle="tooltip" data-placement="top" title="Resign" @click="resignGame(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
-          <span class="options-button" data-toggle="tooltip" data-placement="top" title="Elephant" @click="showThreats(game.id)"><span class="piece.black.elephant"></span></span>
+          <span class="options-button" data-placement="top" title="Resign" @click="resignGame(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
         </div>
       </div>
     </div>
@@ -29,12 +28,12 @@
     <div class="modal-header">
       <h5 class="modal-title">Create Game</h5>
     </div>
-    <ajax-form action="createGame" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{name: newGameDef.name, side: newGameDef.side, opponent: newGameDef.opponent, timeLimit: newGameDef.timeLimit}" @submitted="submittedCreateGameForm($event)" v-if="!createGameFormSuccess">
+    <ajax-form action="createGame" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{name: newGameDef.name, side: newGameDef.side, opponent: newGameDef.opponent, timeLimit: newGameDef.timeLimit, mode: newGameDef.mode}" @submitted="submittedCreateGameForm($event)" v-if="!createGameFormSuccess">
       <div class="modal-body">
         <label class="">
           Opponent:
           <select id="opponent" v-model="newGameDef.opponent" class="" required>
-            <option v-for="opponent in opponents" v-bind:value="opponent.id">{{opponent.name}}</option>
+            <option v-for="opponent in opponents" v-bind:value="opponent.id">{{opponent.fullName}}</option>
           </select>
         </label>
         <br>

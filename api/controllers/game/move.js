@@ -29,6 +29,7 @@ module.exports = {
 
     // All done.
     sails.log.info('move inputs is ', inputs);
+    // TODO; push move onto moves array attribute
     Game.update({id: inputs.id}, {currentFEN: inputs.fen})
     .exec((err, updatedRecord) => {
       if (err) {console.log(err);}

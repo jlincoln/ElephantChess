@@ -17,13 +17,8 @@ parasails.registerPage('games', {
       enableTimeLimit: undefined,
       timeLimit: undefined,
     },
-    fen: "",
-    opponents: [
-      {id: 1, name: 'Jason'},
-      {id: 2, name: 'Christine'},
-      {id: 3, name: 'Kelsey'},
-      {id: 4, name: 'McClain'},
-    ],
+    fen: '',
+    opponents: [],
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -32,6 +27,7 @@ parasails.registerPage('games', {
   beforeMount: function() {
     _.extend(this, SAILS_LOCALS);
     this.games = this._marshalEntries(this.games);
+    this.opponents = this._marshalEntries(this.opponents);
   },
 
   mounted: async function() {

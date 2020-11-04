@@ -34,12 +34,25 @@ module.exports = {
   fn: async function (inputs) {
 
     // All done.
-    sails.log.info('create-game inputs is ', inputs);
-    inputs.currentFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-    var game = await Game.create(inputs);
+    // sails.log.info('create-game inputs is ', inputs);
+    // sails.log.info('this.req.session.userId is ', this.req.session.userId);
+    let gameParams = {};
+    gameParams.currentFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    if (inputs.side === 'white') {
+      gameParams.black = inputs.opponent;
+      gameParams.white = this.req.session.userId;
+    } else {
+      gameParams.black = this.req.session.userId;
+      gameParams.white = inputs.opponent;
+    }
+    gameParams.mode = inputs.mode;
+    gameParams.timeLimit = inputs.timeLimit;
+    gameParams.name = inputs.name;
+
+    var game = await Game.create(gameParams);
+
     return game;
 
   }
 
-
-  };
+};

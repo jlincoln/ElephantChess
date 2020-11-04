@@ -20,22 +20,32 @@ module.exports = {
 
     // Get the list of things this user can see.
     var games = await Game.find({
-      /*
       or: [
-        // Friend things:
-        { owner: { 'in': _.pluck(this.req.me.friends, 'id') } },
-        // My things:
-        { owner: this.req.me.id }
+        { white: this.req.session.userId },
+        { black: this.req.session.userId }
       ]
-      */
+    });
+  
+    var opponents = await User.find({
+      id: {'!=': this.req.session.userId}
     });
 
-    // games = _.each(games, (game) => {if (game.currentFEN === undefined) game.currentFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";});
+    _.each(opponents, (opponent, index) => {
+      opponents[index] = _.pick(opponent, ['id', 'fullName']);
+    });
+
+    // set activeColor attribute based upoon segment 2 of FEN
+    _.each(games, (game, index) => {
+      games[index].activeColor = game.currentFEN.split(" ")[1];
+    });
+
+    // games.activeColor = game
 
     // Respond with view.
     return {
       currentSection: 'games',
       games: games,
+      opponents: opponents
     };
 
   }
