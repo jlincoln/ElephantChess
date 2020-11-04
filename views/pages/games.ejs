@@ -12,7 +12,15 @@
     <div class="listings" v-if="games.length > 0">
       <div class="card" :key="'game'+game.id" v-for="game in games">
         <span>Game Name: {{game.name}}</span>
-        <board :id="game.id" :name="game.name" free="false" :fen="game.currentFEN" orientation="white" show-threats="false"></board>
+        <board
+          :id="game.id"
+          :name="game.name"
+          free="false"
+          :fen="game.currentFEN"
+          :orientation="game.userSide"
+          show-threats="false"
+          :user-side="game.userSide">
+        </board>
         <div class="card-options">
           <span class="options-button" data-placement="top" title="Resign" @click="resignGame(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
         </div>

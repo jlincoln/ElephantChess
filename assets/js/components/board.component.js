@@ -19,7 +19,8 @@ parasails.registerComponent('board', {
     'free',
     'orientation',
     'showThreats',
-    'fen'
+    'fen',
+    'userSide'
   ],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -28,7 +29,7 @@ parasails.registerComponent('board', {
   data: function (){
     return {
       currentFen: this.fen,
-      activeColor: (this.fen.split(' ')[1] === 'w') ? 'White' : 'Black',
+      activeColor: (this.fen.split(' ')[1] === 'w') ? 'White' : 'Black'
     };
   },
 
@@ -37,7 +38,16 @@ parasails.registerComponent('board', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
     <div :name="'board-component-div:' + (name||'')">
-      <echessboard :name="(name||'')" ref="echessboard" :free="(free === 'true')" :orientation="(orientation||'')" :show-threats="(showThreats === 'true')" :fen="currentFen" @onMove="onMove" @onPromption="onPromotion(data)"></echessboard>
+      <echessboard
+        :name="(name||'')"
+        ref="echessboard"
+        :free="(free === 'true')"
+        :orientation="(orientation||'')"
+        :show-threats="(showThreats === 'true')"
+        :fen="currentFen"
+        @onMove="onMove"
+        @onPromption="onPromotion(data)">
+      </echessboard>
       <div>
         <label>
           FEN:
@@ -45,6 +55,10 @@ parasails.registerComponent('board', {
         </label>
         <label>
           Turn: {{ activeColor }}
+        </label>
+        <br>
+        <label>
+          My Side: {{ userSide }}
         </label>
         <br>
         <button @click="changeOrientation">
@@ -61,7 +75,12 @@ parasails.registerComponent('board', {
     //…
   },
   mounted: async function(){
-    //…
+    console.log('mounted: need to set board non mutable if user is not the activeColor');
+    // if (this.$refs.echessboard.board.state.movable.color !== undefined
+    // && this.$refs.echessboard.board.state.movable.color !== ''
+    // && this.$refs.echessboard.board.state.movable.color !== this.userSide) {
+      // this.$refs.echessboard.board.state.movable.color = '';
+    // }
   },
   beforeDestroy: function() {
     //…
@@ -76,6 +95,7 @@ parasails.registerComponent('board', {
       console.log('onMove(data): data is ' + JSON.stringify(data));
       this.currentFen = data['fen'];
       this.activeColor = (data['fen'].split(' ')[1] === 'w') ? 'White' : 'Black';
+      // post the move
       io.socket.post(
         '/api/v1/game/' + this.id + '/move',
         { fen: this.currentFen, _csrf: window.SAILS_LOCALS._csrf },
@@ -83,16 +103,20 @@ parasails.registerComponent('board', {
           console.log('resData is ' + JSON.stringify(resData));
           console.log('jwRes is ' + JSON.stringify(jwRes));
         });
+      // set game to unmovable
+      if (this.$refs.echessboard.board.state.movable.color !== undefined
+      && this.$refs.echessboard.board.state.movable.color !== ''
+      && this.$refs.echessboard.board.state.movable.color !== this.userSide) {
+        this.$refs.echessboard.board.state.movable.color = '';
+      }
     },
 
     onPromotion: function(data){
-      console.log('onPromotion(data): data is ' + JSON.stringify(data));
+      // console.log('onPromotion(data): data is ' + JSON.stringify(data));
     },
 
     changeOrientation: function(data){
-      console.log('changeOrientation(data): data is ' + JSON.stringify(data));
-      // console.log('this.$refs.echessboard is ' + JSON.stringify(this.$refs.echessboard));
-      // console.log(this.$refs.echessboard);
+      // console.log('changeOrientation(data): data is ' + JSON.stringify(data));
       this.$refs.echessboard.board.toggleOrientation();
     },
 

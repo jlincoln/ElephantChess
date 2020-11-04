@@ -37,9 +37,13 @@ module.exports = {
     // set activeColor attribute based upoon segment 2 of FEN
     _.each(games, (game, index) => {
       games[index].activeColor = game.currentFEN.split(" ")[1];
+      sails.log(`this.req.session.userId is ${this.req.session.userId}`);
+      sails.log(`game.white is ${game.white}`);
+      sails.log(`game.black is ${game.black}`);
+      (game.white === this.req.session.userId) ? games[index].userSide = "white" : games[index].userSide = "black";
     });
 
-    // games.activeColor = game
+    sails.log(JSON.stringify(games));
 
     // Respond with view.
     return {
