@@ -81,12 +81,9 @@ parasails.registerPage('games', {
       return;
     },
 
-    submittedCreateGameForm(event) {
+    submittedCreateGameForm() {
       this.creatingGame = false;
       this.createGameFormSuccess = true;
-      // console.log('submittedCreateGameForm event is ', event);
-      // add new game to page
-      // this.games.unshift({name: "new game", fen: ""});
       this.goto('games');
       return;
     },

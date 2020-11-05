@@ -31,12 +31,12 @@ module.exports = {
 
     Game.update({id: inputs.id}, {currentFEN: inputs.fen})
     .exec((err, updatedGame) => {
-      if (err) this.res.notFound();
+      if (err) { this.res.notFound(); }
 
-      sails.log.info(`updated ${updatedGame}`); 
+      sails.log.info(`updated ${updatedGame}`);
       // TODO; push move onto moves array attribute
     });
-  
+
     // setup websocket room
     let roomName = `game:${inputs.id}`;
 
