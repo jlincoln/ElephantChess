@@ -74,7 +74,14 @@ parasails.registerComponent('board', {
     //…
   },
   mounted: async function(){
-    console.log('mounted: need to set board non mutable if user is not the activeColor');
+    // create the game websocket room
+    console.log('mounted, creating socket subscription');
+    io.socket.on('move',(data) => {
+      console.log(`socket event captured with ${JSON.stringify(data)}`);
+      if (this.id === data.gameId && this.currentFen !== data.fen) {
+        this.currentFen = data.fen;
+      }
+    });
   },
   beforeDestroy: function() {
     //…
@@ -93,7 +100,7 @@ parasails.registerComponent('board', {
       io.socket.post(
         '/api/v1/game/' + this.id + '/move',
         { fen: this.currentFen, _csrf: window.SAILS_LOCALS._csrf },
-        function (resData, jwRes) {
+        (resData, jwRes) => {
           console.log('resData is ' + JSON.stringify(resData));
           console.log('jwRes is ' + JSON.stringify(jwRes));
         });
@@ -103,6 +110,7 @@ parasails.registerComponent('board', {
       && this.$refs.echessboard.board.state.movable.color !== this.userSide) {
         this.$refs.echessboard.board.state.movable.color = '';
       }
+      // emit the move event on the game websocket room
     },
 
     onPromotion: function(){

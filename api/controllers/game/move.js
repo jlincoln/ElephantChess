@@ -1,11 +1,8 @@
 module.exports = {
 
-
   friendlyName: 'Move',
 
-
   description: 'Handle a move in the game',
-
 
   inputs: {
     id: {
@@ -19,22 +16,33 @@ module.exports = {
 
   },
 
-
   exits: {
 
   },
-
 
   fn: async function (inputs) {
 
     // All done.
     sails.log.info('move inputs is ', inputs);
-    // TODO; push move onto moves array attribute
+
+    if (!this.req.isSocket) {
+      return this.res.badRequest();
+    }
+
     Game.update({id: inputs.id}, {currentFEN: inputs.fen})
-    .exec((err, updatedRecord) => {
-      if (err) {console.log(err);}
-      console.log(updatedRecord); }
-    );
+    .exec((err, updatedGame) => {
+      if (err) this.res.notFound();
+
+      sails.log.info(`updated ${updatedGame}`); 
+      // TODO; push move onto moves array attribute
+    });
+  
+    // setup websocket room
+    let roomName = `game:${inputs.id}`;
+
+    sails.sockets.join(this.req, roomName);
+
+    sails.sockets.broadcast(roomName, 'move', { gameId: inputs.id, fen: inputs.fen }, this.req);
 
     return;
 

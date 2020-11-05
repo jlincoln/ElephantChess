@@ -23,7 +23,7 @@ module.exports = {
     })
     .populate('white')
     .populate('black');
- 
+
     var opponents = await User.find({
       id: {'!=': this.req.session.userId}
     });
