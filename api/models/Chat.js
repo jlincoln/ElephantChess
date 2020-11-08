@@ -1,5 +1,5 @@
 /**
- * Game.js
+ * Chat.js
  *
  * @description :: A model definition represents a database table/collection.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
@@ -12,28 +12,11 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-    name: {
-      type: 'string'
-    },
-
-    winner: {
+    message: {
       type: 'string',
-      isIn: ['white','black']
+      required: true
     },
 
-    currentFEN: {
-      type: 'json'
-    },
-
-    mode: {
-      type: 'string',
-      description: 'Game play mode (domination or create_and_release)'
-    },
-
-    timeLimit: {
-      type: 'number',
-      description: 'game time limit'
-    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -43,24 +26,15 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
-    white: {
-      model: 'user'
+    sender: {
+      model: 'user',
+      required: true
     },
 
-    black: {
-      model: 'user'
-    },
-
-    moves: {
-      collection: 'move',
-      via: 'game'
-    },
-
-    chats: {
-      collection: 'chat',
-      via: 'game'
-    },
+    game: {
+      model: 'game',
+      required: true
+    }
 
   },
 

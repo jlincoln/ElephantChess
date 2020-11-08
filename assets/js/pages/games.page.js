@@ -66,13 +66,6 @@ parasails.registerPage('games', {
       return argins;
     },
 
-    resignGame: function(gameId) {
-      console.log('resignGame called');
-      let game = _.find(this.games, {id: gameId});
-      game.name = 'Resigned';
-      return;
-    },
-
     showThreats: function() {
       return;
     },

@@ -1,7 +1,7 @@
 <div id="games" v-cloak>
 
   <div class="container">
-    <div class="page-header text-center">
+    <div class="title page-header text-center">
       <h1>Games</h1>
       <p>Create and continue playing games.</p>
       <div class="header-buttons">
@@ -9,25 +9,37 @@
       </div>
       <br>
     </div>
-    <div class="listings" v-if="games.length > 0">
-      <div class="card" :key="'game'+game.id" v-for="game in games">
-        <span>Game Name: {{game.name}}</span>
-        <board
-          :id="game.id"
-          :name="game.name"
-          free="false"
-          :fen="game.currentFEN"
-          :orientation="game.userSide"
-          show-threats="false"
-          :user-side="game.userSide"
-          :opponent="game.opponent">
-        </board>
-        <div class="card-options">
-          <span class="options-button" data-placement="top" title="Resign" @click="resignGame(game.id)"><span class="fa fa-handshake-o text-dark"></span></span>
+    <div class="row justify-content-center" :key="'game' + game.id" v-for="game in games">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-body">
+            <board
+              :id="game.id"
+              :name="game.name"
+              free="false"
+              :fen="game.currentFEN"
+              :orientation="game.userSide"
+              show-threats="false"
+              :user-side="game.userSide"
+              :opponent="game.opponent">
+            </board>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <game-chat
+              :game-id="game.id"
+              :chats="game.chats"
+              :opponent="game.opponent"
+              :user-id="game.userId">
+            </game-chat>
+          </div>
         </div>
       </div>
     </div>
-    <div class="empty text-center" v-else>
+    <div class="row empty text-center" v-if="games.length == 0">
       <p>You do not have any active games at this time. Create a <a @click="openCreateGameForm()">New Game</a> to get started.</p>
     </div>
   </div>

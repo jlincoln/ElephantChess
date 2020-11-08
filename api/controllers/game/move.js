@@ -22,7 +22,6 @@ module.exports = {
 
   fn: async function (inputs) {
 
-    // All done.
     sails.log.info('move inputs is ', inputs);
 
     if (!this.req.isSocket) {

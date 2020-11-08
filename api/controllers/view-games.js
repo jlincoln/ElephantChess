@@ -14,6 +14,8 @@ module.exports = {
 
   fn: async function () {
 
+    const Datetime = require('machinepack-datetime');
+
     // Get the list of things this user can see.
     var games = await Game.find({
       or: [
@@ -22,7 +24,8 @@ module.exports = {
       ]
     })
     .populate('white')
-    .populate('black');
+    .populate('black')
+    .populate('chats', { sort: 'createdAt desc', limit: 100 } );
 
     var opponents = await User.find({
       id: {'!=': this.req.session.userId}
@@ -35,6 +38,7 @@ module.exports = {
     // set activeColor attribute based upon segment 2 of FEN
     _.each(games, (game, index) => {
       games[index].activeColor = game.currentFEN.split(' ')[1];
+      games[index].userId = this.req.session.userId;
       if (game.white.id === this.req.session.userId) {
         games[index].userSide = 'white';
         games[index].opponent = game.black.fullName;
@@ -46,9 +50,17 @@ module.exports = {
         delete games[index].black;
         delete games[index].white;
       }
+      _.each(game.chats, (chat, chatIndex) => {
+        games[index].chats[chatIndex].created = Datetime.timeFrom(
+          {
+            fromWhen: Datetime.now().execSync(),
+            toWhen: chat.createdAt
+          })
+          .execSync();
+      });
     });
 
-    sails.log(JSON.stringify(games));
+    // sails.log(`games is ${JSON.stringify(games)}`);
 
     // Respond with view.
     return {

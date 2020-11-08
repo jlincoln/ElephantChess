@@ -27,7 +27,7 @@ parasails.registerComponent('board', {
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
-  data: function (){
+  data: function () {
     return {
       currentFen: this.fen,
       activeColor: (this.fen.split(' ')[1] === 'w') ? 'White' : 'Black'
@@ -38,16 +38,24 @@ parasails.registerComponent('board', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-    <div :name="'board-component-div:' + (name||'')">
-      <label>
-        I am playing against <strong>{{ opponent }}</strong> / I am {{ userSide }} / It is {{ activeColor }}'s turn
-        <br>
-        <span>
-          <button @click="toggleOrientation" title="toggle board orientation">
-            <span>&#8645;</span>
-          </button>
-        </span>
-      </label>
+    <div :id="'board-component-div:' + id" :name="'board-component-div:' + (name||'')">
+      <span>
+        Name: <strong>{{name}}</strong>
+        Opponent: <strong>{{ opponent }}</strong>
+        Turn: <strong>{{ activeColor === userSide ? 'You' : 'Opponent' }}</strong>
+      </span>
+      <br>
+      <span>
+        <button :title="'You are playing the ' + userSide + ' side.'" @click="showGameSide()">
+          <span>{{ (userSide === "white") ? "&#9816;" : "&#9822;" }}</span>
+        </button>
+        <button @click="toggleOrientation" title="toggle board orientation">
+          <i class="fa fa-exchange fa-rotate-90" aria-hidden="true"></i>
+        </button>
+        <button @click="resignGame" title="resign game">
+          <span><i class="fa fa-handshake-o"></i></span>
+        </button>
+      </span>
       <br>
       <echessboard
         :name="(name||'')"
@@ -59,12 +67,10 @@ parasails.registerComponent('board', {
         @onMove="onMove"
         @onPromption="onPromotion(data)">
       </echessboard>
-      <div>
-        <label>
-          <input type="text" name="fen" v-model="currentFen" size="50">
-        </label>
-      </div>
-     </div>
+      <label>
+        <input type="text" name="fen" v-model="currentFen" size="60">
+      </label>
+    </div>
   `,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -73,16 +79,18 @@ parasails.registerComponent('board', {
   beforeMount: function() {
     //…
   },
+
   mounted: async function(){
-    // create the game websocket room
+    // create the game move websocket room
     console.log('mounted, creating socket subscription');
     io.socket.on('move',(data) => {
-      console.log(`socket event captured with ${JSON.stringify(data)}`);
+      console.log(`move socket event captured with ${JSON.stringify(data)}`);
       if (this.id === data.gameId && this.currentFen !== data.fen) {
         this.currentFen = data.fen;
       }
     });
   },
+
   beforeDestroy: function() {
     //…
   },
@@ -115,6 +123,14 @@ parasails.registerComponent('board', {
 
     onPromotion: function(){
       // console.log('onPromotion(data): data is ' + JSON.stringify(data));
+    },
+
+    resignGame: function(data) {
+      console.log(`resignGame: data is ${JSON.stringify(data)}`);
+    },
+
+    showGameSide: function() {
+      alert(`You are playing the ${this.userSide} side.`);
     },
 
     toggleOrientation: function(){
