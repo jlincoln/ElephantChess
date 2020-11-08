@@ -29,8 +29,6 @@ module.exports = {
 
   fn: async function (inputs) {
 
-    const Datetime = require('machinepack-datetime');
-
     sails.log.info('chat inputs is ', inputs);
 
     if (!this.req.isSocket) {

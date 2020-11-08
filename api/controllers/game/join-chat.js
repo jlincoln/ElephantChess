@@ -14,12 +14,12 @@ module.exports = {
     },
   },
 
- 
+
   exits: {
 
   },
 
-  
+
   fn: async function (inputs) {
 
     sails.log.info('join-chat inputs is ', inputs);
