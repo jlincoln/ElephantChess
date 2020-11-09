@@ -42,7 +42,7 @@ parasails.registerComponent('board', {
       <span>
         Name: <strong>{{name}}</strong>
         Opponent: <strong>{{ opponent }}</strong>
-        Turn: <strong>{{ activeColor === userSide ? 'You' : 'Opponent' }}</strong>
+        Turn: <strong>{{ activeColor.toUpperCase() === userSide.toUpperCase() ? 'You' : 'Opponent' }}</strong>
       </span>
       <br>
       <span>
@@ -87,6 +87,7 @@ parasails.registerComponent('board', {
       console.log(`move socket event captured with ${JSON.stringify(data)}`);
       if (this.id === data.gameId && this.currentFen !== data.fen) {
         this.currentFen = data.fen;
+        this.activeColor = (data.fen.split(' ')[1] === 'w') ? 'White' : 'Black';
       }
     });
   },
