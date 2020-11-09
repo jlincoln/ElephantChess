@@ -47,7 +47,7 @@ parasails.registerComponent('game-chat', {
                     <small class="pull-right" style="padding-right: 2px;">{{ chatMessage.created }}</small>
                   </div>
                   <p class="message">
-                    <strong>{{ (chatMessage.sender === userId) ? "me: " : "opponent: " }}</strong> {{ chatMessage.message }}
+                    <strong>{{ (chatMessage.sender === userId) ? "me: " : opponent.split(" ")[0] + ": " }}</strong> {{ chatMessage.message }}
                   </p>
                 </div>
               </li>
