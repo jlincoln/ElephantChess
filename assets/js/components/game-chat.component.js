@@ -36,15 +36,15 @@ parasails.registerComponent('game-chat', {
   template: `
     <div :id="'chat-component-div:' + gameId">
         <div class="panel panel-default">
-          <div class="panel-heading lead">
+          <div class="panel-heading lead" style="background-color: lightgrey; border-color: black; text-align: center;">
             <i class="fa fa-comment"></i> Messages
           </div>
           <div class="panel-body" style="max-height: 356px; overflow-y: scroll;">
-            <ul class="chat-window">
-              <li class="chat clearfix" v-for="chatMessage in chatMessages">
+            <ul class="chat-window" style="border-color: lightgrey; border-style: solid; border-width: thin;">
+              <li class="chat clearfix" style="font-size: 11px" v-for="chatMessage in chatMessages">
                 <div class="chat-body">
                   <div class="header">
-                    <small class="pull-right">{{ chatMessage.created }}</small>
+                    <small class="pull-right" style="padding-right: 2px;">{{ chatMessage.created }}</small>
                   </div>
                   <p class="message">
                     <strong>{{ (chatMessage.sender === userId) ? "me: " : "opponent: " }}</strong> {{ chatMessage.message }}
@@ -63,6 +63,7 @@ parasails.registerComponent('game-chat', {
                 aria-label="message"
                 aria-describedby="basic-addon2"
                 v-model="message"
+                @keyup.enter="sendMessage()"
                 @keypress="whenTyping($event)"
                 @focus="whenTyping($event)"
                 @blur="whenNotTyping($event)"
@@ -90,9 +91,12 @@ parasails.registerComponent('game-chat', {
   },
 
   mounted: function (){
-    console.log('mounted, creating game chat socket subscription');
+    console.log('mounted, creating game chat socket subscription for gameId ' + this.gameId);
     // join game chat room
     io.socket.put('/api/v1/game/' + this.gameId + '/join-chat',
+        {
+          _csrf: window.SAILS_LOCALS._csrf
+        },
         (resData, jwRes) => {
           console.log('resData is ' + JSON.stringify(resData));
           console.log('jwRes is ' + JSON.stringify(jwRes));
@@ -126,6 +130,7 @@ parasails.registerComponent('game-chat', {
   methods: {
     sendMessage: function() {
       // console.log('sendMessage');
+      if (this.message === '') { return; }
       io.socket.post('/api/v1/game/' + this.gameId + '/chat',
         {
           message: this.message,
