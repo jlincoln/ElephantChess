@@ -32,7 +32,8 @@ parasails.registerComponent('board', {
     return {
       activeColor: (this.fen.split(' ')[1] === 'w') ? 'White' : 'Black',
       currentFen: this.fen,
-      gameWinner: this.winner
+      gameWinner: this.winner,
+      placeElephantColor: ''
     };
   },
 
@@ -40,7 +41,7 @@ parasails.registerComponent('board', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-    <div :id="'board-component-div:' + id" :name="'board-component-div:' + (name||'')">
+    <div :id="'board-component-div-' + id" :name="'board-component-div-' + (name||'')">
       <div class="panel panel-default">
         <div class="panel-heading lead" style="background-color: lightgrey; border-color: black; text-align: left; padding-left: 2px;">
           Name: <strong>{{name}}</strong>
@@ -57,11 +58,14 @@ parasails.registerComponent('board', {
             <button class="btn" :title="'You are playing the ' + userSide + ' side.'" @click="showGameSide()">
               <span>{{ (userSide === "white") ? "&#9816;" : "&#9822;" }}</span>
             </button>
-            <button class="btn" @click="toggleOrientation" title="toggle board orientation">
+            <button class="btn" @click="toggleOrientation()" title="toggle board orientation">
               <i class="fa fa-exchange fa-rotate-90" aria-hidden="true"></i>
             </button>
-            <button class="btn" v-if="!gameWinner" @click="resignGame" title="resign game">
+            <button class="btn" v-if="!gameWinner" @click="resignGame()" title="resign game">
               <span><i class="fa fa-handshake-o"></i></span>
+            </button>
+            <button class="btn" v-if="placeElephantColor.toUpperCase() === userSide.toUpperCase()" @click="placeElephant()" title="place elephant">
+              <span><i class="fa fa-plus-square"></i></span>
             </button>
           </div>
         </div >
@@ -77,11 +81,6 @@ parasails.registerComponent('board', {
             @onPromption="onPromotion(data)">
           </echessboard>
         </div>
-        <div class="panel-footer" style="border-color: lightgrey; border-style: solid; border-width: thin;">
-          <label>
-            <input type="text" name="fen" v-model="currentFen" size="60">
-          </label>
-        </div>
       </div>
     </div>
   `,
@@ -93,7 +92,8 @@ parasails.registerComponent('board', {
     //…
   },
 
-  mounted: async function(){
+  mounted: async function() {
+
     io.socket.on('move',(data) => {
       console.log(`move socket event captured with ${JSON.stringify(data)}`);
       if (this.id === data.gameId && this.currentFen !== data.fen) {
@@ -104,10 +104,16 @@ parasails.registerComponent('board', {
     io.socket.on('resign',(data) => {
       console.log(`resign socket event captured with ${JSON.stringify(data)}`);
     });
+
     if (this.winner) {
       // set game to unmovable
       this.$refs.echessboard.board.state.movable.color = '';
     }
+
+  },
+
+  updated: async function() {
+
   },
 
   beforeDestroy: function() {
@@ -120,32 +126,46 @@ parasails.registerComponent('board', {
   methods: {
 
     onMove: async function(data) {
+
       console.log('onMove(data): data is ' + JSON.stringify(data));
+
+      let history = this.$refs.echessboard.game.history({verbose: true});
+      if (this.placeElephantColor !== 'X' && history && history[history.length-1] && history[history.length-1].captured) {
+        this.placeElephantColor = this.userSide;
+      }
+
       this.currentFen = data['fen'];
       this.activeColor = (data['fen'].split(' ')[1] === 'w') ? 'White' : 'Black';
-      let winner = '', checkmate = this.$refs.echessboard.game.in_checkmate();
+      let winner = '';
+      let checkmate = this.$refs.echessboard.game.in_checkmate();
+
       if (checkmate) {
         winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
         this.gameWinner = winner;
         this.$refs.echessboard.board.state.movable.color = '';
-      } 
+      }
 
       // post the move
-      io.socket.post(
-        '/api/v1/game/' + this.id + '/move',
-        { fen: this.currentFen, _csrf: window.SAILS_LOCALS._csrf, winner: winner },
+      io.socket.post('/api/v1/game/' + this.id + '/move',
+        {
+          _csrf: window.SAILS_LOCALS._csrf,
+          fen: this.currentFen,
+          winner: winner
+        },
         (resData, jwRes) => {
           console.log('resData is ' + JSON.stringify(resData));
           console.log('jwRes is ' + JSON.stringify(jwRes));
-          if (winner) {
+          if (resData === 'OK' && winner) {
             io.socket.post('/api/v1/game/' + this.id + '/chat',
               {
-                message: 'won game',
-                _csrf: window.SAILS_LOCALS._csrf
+                _csrf: window.SAILS_LOCALS._csrf,
+                message: 'won game'
               },
               (resData, jwRes) => {
                 console.log('onMove: won message: resData is ' + JSON.stringify(resData));
-                console.log('onMove: won message: jwRes is ' + JSON.stringify(jwRes));
+                if (resData === 'OK') {
+                  console.log('onMove: won message: jwRes is ' + JSON.stringify(jwRes));
+                }
               }
             );
           }
@@ -158,8 +178,17 @@ parasails.registerComponent('board', {
       }
     },
 
-    onPromotion: function(){
+    onPromotion: function() {
       // console.log('onPromotion(data): data is ' + JSON.stringify(data));
+    },
+
+    placeElephant: function() {
+      let square = prompt('Enter the square to place elephant (e.g. d4).');
+      let result = this.$refs.echessboard.game.put({ type: this.$refs.echessboard.game.ELEPHANT, color: this.userSide[0].toLowerCase() }, square);
+      if (result) {
+        this.currentFen = this.$refs.echessboard.game.fen();
+        this.placeElephantColor = 'X';
+      }
     },
 
     resignGame: function(data) {

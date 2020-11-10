@@ -34,7 +34,7 @@ parasails.registerComponent('game-chat', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-    <div :id="'chat-component-div:' + gameId">
+    <div :id="'chat-component-div-' + gameId">
         <div class="panel panel-default">
           <div class="panel-heading lead" style="background-color: lightgrey; border-color: black; text-align: center;">
             <i class="fa fa-comment-o"></i> Messages
@@ -60,7 +60,7 @@ parasails.registerComponent('game-chat', {
           <div class="panel-footer">
             <div class="input-group mb-3">
               <input
-                :id="'chatMessage:'+gameId"
+                :id="'chatMessage-'+gameId"
                 type="text"
                 class="form-control"
                 placeholder="Type your message here..."
@@ -145,7 +145,7 @@ parasails.registerComponent('game-chat', {
           console.log('jwRes is ' + JSON.stringify(jwRes));
 
           this.message = '';
-          document.getElementById('chatMessage:'+this.gameId).focus();
+          document.getElementById('chatMessage-'+this.gameId).focus();
         }
       );
     },

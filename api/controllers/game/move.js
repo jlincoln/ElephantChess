@@ -43,7 +43,7 @@ module.exports = {
     ).exec((err, updatedGame) => {
       if (err) { this.res.notFound(); }
 
-      // sails.log.info(`updated ${updatedGame}`);
+      sails.log.info(`updated ${updatedGame}`);
       // TODO; push move onto moves array attribute
     });
 
