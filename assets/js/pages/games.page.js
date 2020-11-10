@@ -3,12 +3,12 @@ parasails.registerPage('games', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
-    games: [],
     creatingGame: false,
-    syncing: false,
+    fen: '',
     createGameFormSuccess: false,
     cloudError: '',
     formErrors: { /* … */ },
+    games: [],
     newGameDef: {
       name: undefined,
       side: 'white',
@@ -17,8 +17,8 @@ parasails.registerPage('games', {
       enableTimeLimit: undefined,
       timeLimit: undefined,
     },
-    fen: '',
     opponents: [],
+    syncing: false,
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -53,7 +53,7 @@ parasails.registerPage('games', {
     },
 
     openCreateGameForm: function() {
-      console.log('newGameForm called');
+      // console.log('newGameForm called');
       this.creatingGame = true;
       return;
     },

@@ -14,8 +14,6 @@ module.exports = {
 
   fn: async function () {
 
-    const Datetime = require('machinepack-datetime');
-
     // Get the list of things this user can see.
     var games = await Game.find({
       or: [
@@ -50,14 +48,6 @@ module.exports = {
         delete games[index].black;
         delete games[index].white;
       }
-      _.each(game.chats, (chat, chatIndex) => {
-        games[index].chats[chatIndex].created = Datetime.timeFrom(
-          {
-            fromWhen: Datetime.now().execSync(),
-            toWhen: chat.createdAt
-          })
-          .execSync();
-      });
     });
 
     // sails.log(`games is ${JSON.stringify(games)}`);

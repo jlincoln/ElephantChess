@@ -68,5 +68,6 @@ module.exports.routes = {
   'POST  /api/v1/create-game':                           { action: 'create-game' },
   'POST  /api/v1/game/:id/move':                         { action: 'game/move' },
   'POST  /api/v1/game/:id/chat':                         { action: 'game/chat' },
+  'POST  /api/v1/game/:id/resign':                       { action: 'game/resign' },
 
 };

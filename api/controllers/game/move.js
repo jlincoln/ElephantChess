@@ -13,6 +13,10 @@ module.exports = {
       type: 'string',
       description: 'current game fen'
     },
+    winner: {
+      type: 'string',
+      description: 'color (black, white) of winner.'
+    },
 
   },
 
@@ -28,11 +32,18 @@ module.exports = {
       return this.res.badRequest();
     }
 
-    Game.update({id: inputs.id}, {currentFEN: inputs.fen})
-    .exec((err, updatedGame) => {
+    Game.update(
+      {
+        id: inputs.id
+      },
+      {
+        currentFEN: inputs.fen,
+        winner: inputs.winner
+      }
+    ).exec((err, updatedGame) => {
       if (err) { this.res.notFound(); }
 
-      sails.log.info(`updated ${updatedGame}`);
+      // sails.log.info(`updated ${updatedGame}`);
       // TODO; push move onto moves array attribute
     });
 

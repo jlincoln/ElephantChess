@@ -14,14 +14,15 @@
         <div class="card">
           <div class="card-body">
             <board
-              :id="game.id"
-              :name="game.name"
               free="false"
               :fen="game.currentFEN"
+              :id="game.id"
+              :name="game.name"
               :orientation="game.userSide"
               show-threats="false"
               :user-side="game.userSide"
-              :opponent="game.opponent">
+              :opponent="game.opponent"
+              :winner="game.winner">
             </board>
           </div>
         </div>

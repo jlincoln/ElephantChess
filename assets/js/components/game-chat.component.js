@@ -26,7 +26,7 @@ parasails.registerComponent('game-chat', {
     return {
       message: '',
       chatMessages: this.chats,
-      hasJoinedRoom: false
+      hasJoinedRoom: false,
     };
   },
 
@@ -37,14 +37,18 @@ parasails.registerComponent('game-chat', {
     <div :id="'chat-component-div:' + gameId">
         <div class="panel panel-default">
           <div class="panel-heading lead" style="background-color: lightgrey; border-color: black; text-align: center;">
-            <i class="fa fa-comment"></i> Messages
+            <i class="fa fa-comment-o"></i> Messages
           </div>
           <div class="panel-body" style="max-height: 356px; overflow-y: scroll;">
             <ul class="chat-window" style="border-color: lightgrey; border-style: solid; border-width: thin;">
               <li class="chat clearfix" style="font-size: 11px" v-for="chatMessage in chatMessages">
                 <div class="chat-body">
                   <div class="header">
-                    <small class="pull-right" style="padding-right: 2px;">{{ chatMessage.created }}</small>
+                    <small class="pull-right" style="padding-right: 2px;">
+                      {{
+                        ((new Date(chatMessage.createdAt).toLocaleDateString()) + ' ' + (new Date(chatMessage.createdAt).toLocaleTimeString()))
+                      }}
+                    </small>
                   </div>
                   <p class="message">
                     <strong>{{ (chatMessage.sender === userId) ? "me: " : opponent.split(" ")[0] + ": " }}</strong> {{ chatMessage.message }}
