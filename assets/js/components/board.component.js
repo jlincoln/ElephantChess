@@ -49,7 +49,7 @@ parasails.registerComponent('board', {
             Turn: <strong>{{ activeColor.toUpperCase() === userSide.toUpperCase() ? 'You' : 'Opponent' }}</strong>
           </span>
           <span v-if=gameWinner>
-            Winner: <strong>{{ activeColor.toUpperCase() === gameWinner.toUpperCase() ? 'You' : 'Opponent' }}</strong>
+            Winner: <strong>{{ userSide.toUpperCase() === gameWinner.toUpperCase() ? 'You' : 'Opponent' }}</strong>
           </span>
         </div>
         <div class="panel-heading" style="border-color: lightgrey; border-style: solid; border-width: thin; padding-left: 2px;">
