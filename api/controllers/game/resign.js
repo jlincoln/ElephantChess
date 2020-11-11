@@ -29,7 +29,7 @@ module.exports = {
 
   fn: async function (inputs) {
 
-    sails.log.info('move inputs is ', inputs);
+    sails.log.info('resign inputs is ', inputs);
 
     if (!this.req.isSocket) {
       return this.res.badRequest();
