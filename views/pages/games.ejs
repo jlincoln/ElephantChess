@@ -12,7 +12,7 @@
     <div class="row justify-content-center" :key="'game' + game.id" v-for="game in games">
       <div class="col-md-8">
         <div class="card">
-          <div class="card-body">
+          <div class="card-body" style="height: 480px;">
             <board
               free="false"
               :fen="game.currentFEN"
@@ -29,7 +29,7 @@
       </div>
       <div class="col-md-4">
         <div class="card">
-          <div class="card-body">
+          <div class="card-body" style="height: 480px;">
             <game-chat
               :game-id="game.id"
               :chats="game.chats"
