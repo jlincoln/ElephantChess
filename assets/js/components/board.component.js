@@ -175,17 +175,24 @@ parasails.registerComponent('board', {
         this.placeElephantColor = this.userSide;
       }
 
-      this.currentFen = data['fen'];
-      this.activeColor = (data['fen'].split(' ')[1] === 'w') ? 'White' : 'Black';
-      let winner = '';
-      let checkmate = this.$refs.echessboard.game.in_checkmate();
+      // set game to unmovable if active side !== userSide
+      if (this.$refs.echessboard.board.state.movable.color !== undefined
+      && this.$refs.echessboard.board.state.movable.color !== ''
+      && this.$refs.echessboard.board.state.movable.color !== this.userSide) {
+        this.$refs.echessboard.board.state.movable.color = ''; // invoking onMove?
+      } 
 
-      if (checkmate) {
-        winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
-        this.gameWinner = winner;
-        this.$refs.echessboard.board.state.movable.color = '';
+      if (this.currentFen !== data['fen']) {
+        this.currentFen = data['fen'];
+        this.activeColor = (data['fen'].split(' ')[1] === 'w') ? 'White' : 'Black';
+      } else {
+        // move already posted
+        return;
       }
 
+      let winner = '';
+      let checkmate = this.$refs.echessboard.game.in_checkmate();
+      let check = this.$refs.echessboard.game.in_check();
       // post the move
       io.socket.post('/api/v1/game/' + this.id + '/move',
         {
@@ -196,27 +203,38 @@ parasails.registerComponent('board', {
         (resData, jwRes) => {
           console.log('resData is ' + JSON.stringify(resData));
           console.log('jwRes is ' + JSON.stringify(jwRes));
-          if (resData === 'OK' && winner) {
+          if (resData === 'OK' && checkmate) {
             io.socket.post('/api/v1/game/' + this.id + '/chat',
               {
                 _csrf: window.SAILS_LOCALS._csrf,
-                message: 'won game'
+                message: 'checkmate'
               },
               (resData, jwRes) => {
-                console.log('onMove: won message: resData is ' + JSON.stringify(resData));
+                console.log('onMove: checkmate message: resData is ' + JSON.stringify(resData));
                 if (resData === 'OK') {
-                  console.log('onMove: won message: jwRes is ' + JSON.stringify(jwRes));
+                  winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
+                  this.gameWinner = winner;
+                  this.$refs.echessboard.board.state.movable.color = '';
+                } else {
+                  console.log('onMove: checkmate message: jwRes is ' + JSON.stringify(jwRes));
+                }
+              }
+            );
+          } else if (check) {
+            io.socket.post('/api/v1/game/' + this.id + '/chat',
+              {
+                _csrf: window.SAILS_LOCALS._csrf,
+                message: 'check'
+              },
+              (resData, jwRes) => {
+                console.log('onMove: check message: resData is ' + JSON.stringify(resData));
+                if (resData !== 'OK') {
+                  console.log('onMove: check message: jwRes is ' + JSON.stringify(jwRes));
                 }
               }
             );
           }
         });
-      // set game to unmovable
-      if (this.$refs.echessboard.board.state.movable.color !== undefined
-      && this.$refs.echessboard.board.state.movable.color !== ''
-      && this.$refs.echessboard.board.state.movable.color !== this.userSide) {
-        this.$refs.echessboard.board.state.movable.color = '';
-      }
     },
 
     onPromotion: function() {

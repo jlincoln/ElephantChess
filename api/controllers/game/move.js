@@ -26,7 +26,7 @@ module.exports = {
 
   fn: async function (inputs) {
 
-    sails.log.info('move inputs is ', inputs);
+    sails.log.info('move: inputs is ', inputs);
 
     if (!this.req.isSocket) {
       return this.res.badRequest();
@@ -43,7 +43,7 @@ module.exports = {
     ).exec((err, updatedGame) => {
       if (err) { this.res.notFound(); }
 
-      sails.log.info(`updated ${updatedGame}`);
+      sails.log.info(`move: updated ${updatedGame}`);
       // TODO; push move onto moves array attribute
     });
 

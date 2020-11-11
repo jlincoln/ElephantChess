@@ -21,7 +21,7 @@
     "eslint": "5.16.0",
     "htmlhint": "0.11.0",
     "lesshint": "6.3.6",
-    "vue-echessboard": "^0.0.15"
+    "vue-echessboard": "^0.0.16"
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",

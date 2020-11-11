@@ -29,7 +29,7 @@ module.exports = {
 
   fn: async function (inputs) {
 
-    sails.log.info('chat inputs is ', inputs);
+    sails.log.info('chat: inputs is ', inputs);
 
     if (!this.req.isSocket) {
       throw 'notFound';
@@ -46,7 +46,7 @@ module.exports = {
     if (!createdChat) {
       return this.res.notFound();
     } else {
-      sails.log.info(`created ${JSON.stringify(createdChat)}`);
+      sails.log.info(`chat: created ${JSON.stringify(createdChat)}`);
       // setup websocket room
       let roomName = `game-chat:${inputs.id}`;
       sails.sockets.join(this.req, roomName);

@@ -22,7 +22,7 @@ module.exports = {
 
   fn: async function (inputs) {
 
-    sails.log.info('join-chat inputs is ', inputs);
+    sails.log.info('join-chat: inputs is ', inputs);
 
     if (!this.req.isSocket) {
       return this.res.badRequest();
