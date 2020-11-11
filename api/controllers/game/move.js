@@ -32,7 +32,7 @@ module.exports = {
       return this.res.badRequest();
     }
 
-    Game.update(
+    let updatedGame = await Game.updateOne(
       {
         id: inputs.id
       },
@@ -40,12 +40,17 @@ module.exports = {
         currentFEN: inputs.fen,
         winner: inputs.winner
       }
-    ).exec((err, updatedGame) => {
-      if (err) { this.res.notFound(); }
+    );
 
-      sails.log.info(`move: updated ${updatedGame}`);
-      // TODO; push move onto moves array attribute
-    });
+    if (!updatedGame) {
+      return this.res.notFound();
+    }
+
+    sails.log.info(`move: updatedGame is ${JSON.stringify(updatedGame)}`);
+
+    let createdMove = await Move.create({ move: { 'fen': inputs.fen }, game: inputs.id }).fetch();
+
+    sails.log.info(`move: createdMove ${JSON.stringify(createdMove)}`);
 
     // setup websocket room
     let roomName = `game:${inputs.id}`;
