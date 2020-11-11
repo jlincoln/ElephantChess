@@ -54,19 +54,21 @@ parasails.registerComponent('board', {
           </span>
         </div>
         <div class="panel-heading" style="border-color: lightgrey; border-style: solid; border-width: thin; padding-left: 2px;">
-          <div class="input-grp mb-3">
-            <button class="btn" :title="'You are playing the ' + userSide + ' side.'" @click="showGameSide()">
-              <span>{{ (userSide === "white") ? "&#9816;" : "&#9822;" }}</span>
-            </button>
-            <button class="btn" @click="toggleOrientation()" title="toggle board orientation">
-              <i class="fa fa-exchange fa-rotate-90" aria-hidden="true"></i>
-            </button>
-            <button class="btn" v-if="!gameWinner" @click="resignGame()" title="resign game">
-              <span><i class="fa fa-handshake-o"></i></span>
-            </button>
-            <button class="btn" v-if="placeElephantColor.toUpperCase() === userSide.toUpperCase()" @click="placeElephant()" title="place elephant">
-              <span><i class="fa fa-plus-square"></i></span>
-            </button>
+          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups"> 
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+              <button class="btn btn-outline-secondary" :title="'You are playing the ' + userSide + ' side.'" @click="showGameSide()" style="width: 46px;">
+                <span>{{ (userSide === "white") ? "&#9816;" : "&#9822;" }}</span>
+              </button>
+              <button class="btn btn-outline-secondary" @click="toggleOrientation()" title="toggle board orientation" style="width: 46px;">
+               <i class="fa fa-exchange fa-rotate-90" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-outline-secondary" v-if="!gameWinner" @click="resignGame()" title="resign game" style="width: 46px;">
+                <span><i class="fa fa-handshake-o"></i></span>
+              </button>
+              <button class="btn btn-outline-secondary" v-if="placeElephantColor.toUpperCase() === userSide.toUpperCase()" @click="placeElephant()" title="place elephant" style="width: 46px;">
+                <span><i class="fa fa-plus-square"></i></span>
+              </button>
+            </div>
           </div>
         </div >
         <div class="panel-body" style="border-color: lightgrey; border-style: solid; border-width: thin;">
