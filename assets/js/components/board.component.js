@@ -31,10 +31,11 @@ parasails.registerComponent('board', {
   data: function () {
     return {
       activeColor: (this.fen.split(' ')[1] === 'w') ? 'White' : 'Black',
+      archivedGame: false,
       currentFen: this.fen,
       gameWinner: this.winner,
-      archivedGame: false,
-      placeElephantColor: ''
+      placeElephantColor: '',
+      hasJoinedRoom: false
     };
   },
 
@@ -100,6 +101,22 @@ parasails.registerComponent('board', {
 
   mounted: async function() {
 
+    console.log('mounted: ');
+    if (!this.hasJoinedRoom) {
+      // join game room
+      console.log('mounted: joining game room');
+      io.socket.put('/api/v1/game/' + this.id + '/join-game',
+        {
+          _csrf: window.SAILS_LOCALS._csrf
+        },
+        (resData, jwRes) => {
+          console.log('mounted: join-game resData is ' + JSON.stringify(resData));
+          console.log('mounted: join-game jwRes is ' + JSON.stringify(jwRes));
+          this.hasJoinedRoom = true;
+        }
+      );
+    }
+
     io.socket.on('move',(data) => {
       console.log(`move socket event captured with ${JSON.stringify(data)}`);
       if (this.id === data.gameId && this.currentFen !== data.fen) {
@@ -107,12 +124,14 @@ parasails.registerComponent('board', {
         this.activeColor = (data.fen.split(' ')[1] === 'w') ? 'White' : 'Black';
       }
     });
+
     io.socket.on('resign',(data) => {
       console.log(`resign socket event captured with ${JSON.stringify(data)}`);
     });
+
     io.socket.on('archived',(data) => {
       console.log(`archived socket event captured with ${JSON.stringify(data)}`);
-      alert("Game archived");
+      alert('Game archived');
       this.archivedGame = true;
     });
 
@@ -179,8 +198,8 @@ parasails.registerComponent('board', {
       if (this.$refs.echessboard.board.state.movable.color !== undefined
       && this.$refs.echessboard.board.state.movable.color !== ''
       && this.$refs.echessboard.board.state.movable.color !== this.userSide) {
-        this.$refs.echessboard.board.state.movable.color = ''; // invoking onMove?
-      } 
+        this.$refs.echessboard.board.state.movable.color = '';
+      }
 
       if (this.currentFen !== data['fen']) {
         this.currentFen = data['fen'];
