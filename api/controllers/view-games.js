@@ -16,6 +16,7 @@ module.exports = {
 
     // Get the list of things this user can see.
     var games = await Game.find({
+      archived: false,
       or: [
         { white: this.req.session.userId },
         { black: this.req.session.userId }

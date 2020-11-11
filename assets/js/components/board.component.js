@@ -33,6 +33,7 @@ parasails.registerComponent('board', {
       activeColor: (this.fen.split(' ')[1] === 'w') ? 'White' : 'Black',
       currentFen: this.fen,
       gameWinner: this.winner,
+      archivedGame: false,
       placeElephantColor: ''
     };
   },
@@ -64,6 +65,9 @@ parasails.registerComponent('board', {
               </button>
               <button class="btn btn-outline-secondary" v-if="!gameWinner" @click="resignGame()" title="resign game" style="width: 46px;">
                 <span><i class="fa fa-handshake-o"></i></span>
+              </button>
+              <button class="btn btn-outline-secondary" v-if="!archivedGame" @click="archiveGame()" title="archive game" style="width: 46px;">
+                <span><i class="fa fa-archive"></i></span>
               </button>
               <button class="btn btn-outline-secondary" v-if="placeElephantColor.toUpperCase() === userSide.toUpperCase()" @click="placeElephant()" title="place elephant" style="width: 46px;">
                 <span><i class="fa fa-plus-square"></i></span>
@@ -106,6 +110,11 @@ parasails.registerComponent('board', {
     io.socket.on('resign',(data) => {
       console.log(`resign socket event captured with ${JSON.stringify(data)}`);
     });
+    io.socket.on('archived',(data) => {
+      console.log(`archived socket event captured with ${JSON.stringify(data)}`);
+      alert("Game archived");
+      this.archivedGame = true;
+    });
 
     if (this.winner) {
       // set game to unmovable
@@ -126,6 +135,36 @@ parasails.registerComponent('board', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+
+    archiveGame: function(data) {
+
+      console.log(`archiveGame: data is ${JSON.stringify(data)}`);
+
+      if (this.archivedGame) { return; }
+
+      if (confirm('Confirm archive')) {
+        // post the archive
+        io.socket.post('/api/v1/game/' + this.id + '/archive',
+          {
+            id: this.id,
+            _csrf: window.SAILS_LOCALS._csrf
+          },
+          (resData, jwRes) => {
+            console.log('archive: resData is ' + JSON.stringify(resData));
+            console.log('archive: jwRes is ' + JSON.stringify(jwRes));
+            io.socket.post('/api/v1/game/' + this.id + '/chat',
+              {
+                message: 'archived game',
+                _csrf: window.SAILS_LOCALS._csrf
+              },
+              (resData, jwRes) => {
+                console.log('archived message: resData is ' + JSON.stringify(resData));
+                console.log('archived message: jwRes is ' + JSON.stringify(jwRes));
+              }
+            );
+          });
+      }
+    },
 
     onMove: async function(data) {
 
@@ -201,7 +240,7 @@ parasails.registerComponent('board', {
         // post the resignation
         io.socket.post('/api/v1/game/' + this.id + '/resign',
           {
-            id: this.currentFen,
+            id: this.id,
             winner: winner,
             _csrf: window.SAILS_LOCALS._csrf
           },

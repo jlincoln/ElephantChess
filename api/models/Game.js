@@ -35,6 +35,11 @@ module.exports = {
       description: 'game time limit'
     },
 
+    archived: {
+      type: 'boolean',
+      description: 'Indicates if the game is archived or not'
+    },
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
