@@ -34,7 +34,6 @@ parasails.registerComponent('board', {
       archivedGame: false,
       currentFen: this.fen,
       gameWinner: this.winner,
-      placeElephantColor: '',
       hasJoinedRoom: false
     };
   },
@@ -70,9 +69,6 @@ parasails.registerComponent('board', {
               <button class="btn btn-outline-secondary" v-if="!archivedGame" @click="archiveGame()" title="archive game" style="width: 46px;">
                 <span><i class="fa fa-archive"></i></span>
               </button>
-              <button class="btn btn-outline-secondary" v-if="placeElephantColor.toUpperCase() === userSide.toUpperCase()" @click="placeElephant()" title="place elephant" style="width: 46px;">
-                <span><i class="fa fa-plus-square"></i></span>
-              </button>
             </div>
           </div>
         </div >
@@ -102,6 +98,7 @@ parasails.registerComponent('board', {
   mounted: async function() {
 
     console.log('mounted: ');
+
     if (!this.hasJoinedRoom) {
       // join game room
       console.log('mounted: joining game room');
@@ -131,7 +128,6 @@ parasails.registerComponent('board', {
 
     io.socket.on('archived',(data) => {
       console.log(`archived socket event captured with ${JSON.stringify(data)}`);
-      alert('Game archived');
       this.archivedGame = true;
     });
 
@@ -185,20 +181,39 @@ parasails.registerComponent('board', {
       }
     },
 
+    moveCapturedPiece: function() {
+      let history = this.$refs.echessboard.game.history({verbose: true});
+      if (history && history[history.length-1] && history[history.length-1].captured) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    elephantPiecePlaced: function() {
+      let re = /[eE]/;
+      if (this.currentFen && re.exec(this.currentFen.split(' ')[0])) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
     onMove: async function(data) {
 
       console.log('onMove(data): data is ' + JSON.stringify(data));
 
-      let history = this.$refs.echessboard.game.history({verbose: true});
-      if (this.placeElephantColor !== 'X' && history && history[history.length-1] && history[history.length-1].captured) {
-        this.placeElephantColor = this.userSide;
+      if (this.moveCapturedPiece() && !this.elephantPiecePlaced()) {
+        this.placeElephant();
+        this.setBoardUnmovable();
+        return;
       }
 
       // set game to unmovable if active side !== userSide
       if (this.$refs.echessboard.board.state.movable.color !== undefined
       && this.$refs.echessboard.board.state.movable.color !== ''
       && this.$refs.echessboard.board.state.movable.color !== this.userSide) {
-        this.$refs.echessboard.board.state.movable.color = '';
+        this.setBoardUnmovable();
       }
 
       if (this.currentFen !== data['fen']) {
@@ -265,7 +280,31 @@ parasails.registerComponent('board', {
       let result = this.$refs.echessboard.game.put({ type: this.$refs.echessboard.game.ELEPHANT, color: this.userSide[0].toLowerCase() }, square);
       if (result) {
         this.currentFen = this.$refs.echessboard.game.fen();
-        this.placeElephantColor = 'X';
+        // post the move
+        io.socket.post('/api/v1/game/' + this.id + '/move',
+          {
+            _csrf: window.SAILS_LOCALS._csrf,
+            fen: this.currentFen,
+            winner: ''
+          },
+          (resData, jwRes) => {
+            console.log('resData is ' + JSON.stringify(resData));
+            console.log('jwRes is ' + JSON.stringify(jwRes));
+            if (resData === 'OK') {
+              io.socket.post('/api/v1/game/' + this.id + '/chat',
+                {
+                  _csrf: window.SAILS_LOCALS._csrf,
+                  message: 'added elephant'
+                },
+                (resData, jwRes) => {
+                  console.log('placeElephant: added elephant message resData is ' + JSON.stringify(resData));
+                  console.log('placeElephant: added elephant message jwRes is ' + JSON.stringify(jwRes));
+                }
+              );
+            } else {
+              console.log('placeElephant: added elephant message resData nopt OK jwRes is ' + JSON.stringify(jwRes));
+            }
+          });
       }
     },
 
@@ -296,6 +335,10 @@ parasails.registerComponent('board', {
             );
           });
       }
+    },
+
+    setBoardUnmovable: function() {
+      this.$refs.echessboard.board.state.movable.color = '';
     },
 
     showGameSide: function() {
