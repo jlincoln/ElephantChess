@@ -40,6 +40,13 @@ the account verification message.)`,
       type: 'string',
       example: 'Frida Kahlo de Rivera',
       description: 'The user\'s full name.',
+    },
+
+    alias:  {
+      required: false,
+      type: 'string',
+      example: 'Bytor',
+      description: 'The user\'s alias.',
     }
 
   },
@@ -58,6 +65,11 @@ the account verification message.)`,
       'parameters should have been validated/coerced _before_ they were sent.'
     },
 
+    aliasAlreadyInUse: {
+      statusCode: 409,
+      description: 'The provided alias is already in use.',
+    },
+
     emailAlreadyInUse: {
       statusCode: 409,
       description: 'The provided email address is already in use.',
@@ -66,7 +78,7 @@ the account verification message.)`,
   },
 
 
-  fn: async function ({emailAddress, password, fullName}) {
+  fn: async function ({emailAddress, password, fullName, alias}) {
 
     var newEmailAddress = emailAddress.toLowerCase();
 
@@ -74,6 +86,7 @@ the account verification message.)`,
     // (Also use `fetch` to retrieve the new ID so that we can use it below.)
     var newUserRecord = await User.create(_.extend({
       fullName,
+      alias,
       emailAddress: newEmailAddress,
       password: await sails.helpers.passwords.hashPassword(password),
       tosAcceptedByIp: this.req.ip
@@ -83,6 +96,7 @@ the account verification message.)`,
       emailStatus: 'unconfirmed'
     }:{}))
     .intercept('E_UNIQUE', 'emailAlreadyInUse')
+    .intercept('E_UNIQUE', 'aliasAlreadyInUse')
     .intercept({name: 'UsageError'}, 'invalid')
     .fetch();
 

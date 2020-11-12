@@ -13,6 +13,10 @@ module.exports = {
       type: 'string'
     },
 
+    alias: {
+      type: 'string'
+    },
+
     emailAddress: {
       type: 'string'
     },
@@ -30,7 +34,7 @@ module.exports = {
   },
 
 
-  fn: async function ({fullName, emailAddress}) {
+  fn: async function ({fullName, alias, emailAddress}) {
 
     var newEmailAddress = emailAddress;
     if (newEmailAddress !== undefined) {
@@ -76,6 +80,7 @@ module.exports = {
     // (We always set the fullName if provided.)
     var valuesToSet = {
       fullName,
+      alias,
     };
 
     switch (desiredEmailEffect) {

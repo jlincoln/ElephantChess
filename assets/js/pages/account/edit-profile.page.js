@@ -16,6 +16,7 @@ parasails.registerPage('edit-profile', {
     // Form rules
     formRules: {
       fullName: {required: true},
+      alias: {required: true},
       emailAddress: {required: true, isEmail: true},
     },
 
@@ -29,6 +30,7 @@ parasails.registerPage('edit-profile', {
   beforeMount: function() {
     // Set the form data.
     this.formData.fullName = this.me.fullName;
+    this.formData.alias = this.me.alias;
     this.formData.emailAddress = this.me.emailChangeCandidate ? this.me.emailChangeCandidate : this.me.emailAddress;
   },
   mounted: async function() {

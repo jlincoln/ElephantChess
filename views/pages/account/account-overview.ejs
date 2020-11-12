@@ -23,6 +23,10 @@
         <span v-if="me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested'" class="badge badge-pill badge-warning">Unverified</span>
       </div>
     </div>
+    <div class="row">
+      <div class="col-3">Alias:</div>
+      <div class="col"><strong>{{me.alias}}</strong></div>
+    </div>
     <hr/>
     <div class="row mb-3">
       <div class="col-sm-6">
