@@ -49,7 +49,16 @@ module.exports = {
     gameParams.timeLimit = inputs.timeLimit;
     gameParams.name = inputs.name;
 
-    var game = await Game.create(gameParams);
+    let creator = await User.findOne({id: this.req.session.userId});
+
+    let game = await Game.create(gameParams);
+
+    // setup websocket room
+    let roomName = `my-games:${inputs.opponent}`;
+
+    sails.sockets.join(this.req, roomName);
+
+    sails.sockets.broadcast(roomName, 'my-games-create', { gameId: inputs.id, gameName: inputs.name, opponent: creator.alias }, this.req);
 
     return game;
 

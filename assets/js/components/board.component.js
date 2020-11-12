@@ -34,7 +34,7 @@ parasails.registerComponent('board', {
       archivedGame: false,
       currentFen: this.fen,
       gameWinner: this.winner,
-      hasJoinedRoom: false
+      hasJoinedRoom: false,
     };
   },
 
@@ -45,7 +45,7 @@ parasails.registerComponent('board', {
     <div :id="'board-component-div-' + id" :name="'board-component-div-' + (name||'')">
       <div class="panel panel-default">
         <div class="panel-heading lead" style="background-color: lightgrey; border-color: black; text-align: left; padding-left: 2px;">
-          Name: <strong>{{name}}</strong>
+          <strong>{{name}}</strong>
           Opponent: <strong>{{ opponent }}</strong>
           <span v-if=!gameWinner>
             Turn: <strong>{{ activeColor.toUpperCase() === userSide.toUpperCase() ? 'You' : 'Opponent' }}</strong>

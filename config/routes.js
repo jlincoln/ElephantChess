@@ -67,6 +67,7 @@ module.exports.routes = {
   'POST  /api/v1/entrance/update-password-and-login':    { action: 'entrance/update-password-and-login' },
   'POST  /api/v1/deliver-contact-form-message':          { action: 'deliver-contact-form-message' },
   'POST  /api/v1/create-game':                           { action: 'create-game' },
+  'POST  /api/v1/game/join-my-games':                    { action: 'game/join-my-games' },
   'POST  /api/v1/game/:id/move':                         { action: 'game/move' },
   'POST  /api/v1/game/:id/chat':                         { action: 'game/chat' },
   'POST  /api/v1/game/:id/resign':                       { action: 'game/resign' },
