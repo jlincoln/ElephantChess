@@ -1,0 +1,47 @@
+<div id="games-archived" v-cloak>
+
+  <div class="container">
+    <div class="title page-header text-center">
+      <h1>Archived Games</h1>
+      <p>See your archived games.</p>
+      <br>
+    </div>
+    <div class="row justify-content-center" :key="'game' + game.id" v-for="game in games">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-body" style="height: 480px;">
+            <board
+              :archived="game.archived"
+              free="false"
+              :fen="game.currentFEN"
+              :id="game.id"
+              :name="game.name"
+              :orientation="game.userSide"
+              show-threats="false"
+              :user-side="game.userSide"
+              :opponent="game.opponent"
+              :winner="game.winner">
+            </board>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body" style="height: 480px;">
+            <game-chat
+              :game-id="game.id"
+              :chats="game.chats"
+              :opponent="game.opponent"
+              :user-id="game.userId">
+            </game-chat>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row empty text-center" v-if="games.length == 0">
+      <p>You do not have any archived games at this time.</p>
+    </div>
+  </div>
+
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

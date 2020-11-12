@@ -14,6 +14,7 @@
         <div class="card">
           <div class="card-body" style="height: 480px;">
             <board
+              :archived="game.archived"
               free="false"
               :fen="game.currentFEN"
               :id="game.id"

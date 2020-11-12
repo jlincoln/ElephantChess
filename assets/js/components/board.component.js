@@ -22,7 +22,8 @@ parasails.registerComponent('board', {
     'fen',
     'userSide',
     'opponent',
-    'winner'
+    'winner',
+    'archived'
   ],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -31,7 +32,7 @@ parasails.registerComponent('board', {
   data: function () {
     return {
       activeColor: (this.fen.split(' ')[1] === 'w') ? 'White' : 'Black',
-      archivedGame: false,
+      archivedGame: this.archived,
       currentFen: this.fen,
       gameWinner: this.winner,
       hasJoinedRoom: false,
@@ -67,6 +68,9 @@ parasails.registerComponent('board', {
                 <span><i class="fa fa-handshake-o"></i></span>
               </button>
               <button class="btn btn-outline-secondary" v-if="!archivedGame" @click="archiveGame()" title="archive game" style="width: 46px;">
+                <span><i class="fa fa-archive"></i></span>
+              </button>
+              <button class="btn btn-outline-secondary" v-if="archivedGame" @click="unArchiveGame()" title="unarchive game" style="width: 46px;">
                 <span><i class="fa fa-archive"></i></span>
               </button>
             </div>
@@ -175,6 +179,36 @@ parasails.registerComponent('board', {
               (resData, jwRes) => {
                 console.log('archived message: resData is ' + JSON.stringify(resData));
                 console.log('archived message: jwRes is ' + JSON.stringify(jwRes));
+              }
+            );
+          });
+      }
+    },
+
+    unArchiveGame: function(data) {
+
+      console.log(`unArchiveGame: data is ${JSON.stringify(data)}`);
+
+      if (this.unArchivedGame) { return; }
+
+      if (confirm('Confirm unarchive')) {
+        // post the unArchive
+        io.socket.post('/api/v1/game/' + this.id + '/unarchive',
+          {
+            id: this.id,
+            _csrf: window.SAILS_LOCALS._csrf
+          },
+          (resData, jwRes) => {
+            console.log('unArchive: resData is ' + JSON.stringify(resData));
+            console.log('unArchive: jwRes is ' + JSON.stringify(jwRes));
+            io.socket.post('/api/v1/game/' + this.id + '/chat',
+              {
+                message: 'unarchived game',
+                _csrf: window.SAILS_LOCALS._csrf
+              },
+              (resData, jwRes) => {
+                console.log('unarchived message: resData is ' + JSON.stringify(resData));
+                console.log('unarchived message: jwRes is ' + JSON.stringify(jwRes));
               }
             );
           });

@@ -1,10 +1,10 @@
 module.exports = {
 
 
-  friendlyName: 'Archive',
+  friendlyName: 'Unarchive',
 
 
-  description: 'Archive game.',
+  description: 'Unarchive game.',
 
 
   inputs: {
@@ -23,24 +23,18 @@ module.exports = {
 
   fn: async function (inputs) {
 
-    sails.log.info('archive inputs is ', inputs);
+    sails.log.info('unarchive inputs is ', inputs);
 
     if (!this.req.isSocket) {
       return this.res.badRequest();
     }
 
-    Game.update({id: inputs.id}, {archived: true})
+    Game.update({id: inputs.id}, {archived: false})
     .exec((err, updatedGame) => {
       if (err) { this.res.notFound(); }
 
       sails.log.info(`updated ${updatedGame}`);
     });
-
-    let roomName = `game:${inputs.id}`;
-
-    sails.sockets.join(this.req, roomName);
-
-    sails.sockets.broadcast(roomName, 'archived', { gameId: inputs.id });
 
     // All done.
     return;

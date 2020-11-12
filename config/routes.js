@@ -33,9 +33,10 @@ module.exports.routes = {
   'GET /account/password':   { action: 'account/view-edit-password' },
   'GET /account/profile':    { action: 'account/view-edit-profile' },
 
-  'GET /game/:id':           { action:   'view-games' },
-  'GET /game':               { action:   'view-games' },
-  'GET /games':              { action:   'view-games' },
+  'GET /game/:id':           { action:  'view-games' },
+  'GET /game':               { action:  'view-games' },
+  'GET /games':              { action:  'view-games' },
+  'GET /games-archived':     { action:  'view-games-archived' },
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
@@ -72,5 +73,6 @@ module.exports.routes = {
   'POST  /api/v1/game/:id/chat':                         { action: 'game/chat' },
   'POST  /api/v1/game/:id/resign':                       { action: 'game/resign' },
   'POST  /api/v1/game/:id/archive':                      { action: 'game/archive' },
+  'POST  /api/v1/game/:id/unarchive':                    { action: 'game/unarchive' },
 
 };
