@@ -46,18 +46,12 @@ module.exports = {
       return this.res.notFound();
     }
 
-    sails.log.info(`move: updatedGame is ${JSON.stringify(updatedGame)}`);
-
     let createdMove = await Move.create({ move: { 'fen': inputs.fen }, game: inputs.id }).fetch();
 
-    sails.log.info(`move: createdMove ${JSON.stringify(createdMove)}`);
-
-    // setup websocket room
+    // broadcast to move websocket game specific room to other connected sessions
     let roomName = `game:${inputs.id}`;
 
-    sails.sockets.join(this.req, roomName);
-
-    sails.sockets.broadcast(roomName, 'move', { gameId: inputs.id, fen: inputs.fen }, this.req);
+    sails.sockets.broadcast(roomName, `move-${roomName}`, { gameId: inputs.id, fen: inputs.fen }, this.req);
 
     return;
 

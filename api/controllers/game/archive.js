@@ -32,15 +32,11 @@ module.exports = {
     Game.update({id: inputs.id}, {archived: true})
     .exec((err, updatedGame) => {
       if (err) { this.res.notFound(); }
-
-      sails.log.info(`updated ${updatedGame}`);
     });
 
     let roomName = `game:${inputs.id}`;
 
-    sails.sockets.join(this.req, roomName);
-
-    sails.sockets.broadcast(roomName, 'archived', { gameId: inputs.id });
+    sails.sockets.broadcast(roomName, `archive-${roomName}`, { gameId: inputs.id });
 
     // All done.
     return;

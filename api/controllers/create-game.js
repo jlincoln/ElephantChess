@@ -53,10 +53,8 @@ module.exports = {
 
     let game = await Game.create(gameParams);
 
-    // setup websocket room
+    // broadcast game creation to user specific websocket room
     let roomName = `my-games:${inputs.opponent}`;
-
-    sails.sockets.join(this.req, roomName);
 
     sails.sockets.broadcast(roomName, 'my-games-create', { gameId: inputs.id, gameName: inputs.name, opponent: creator.alias }, this.req);
 

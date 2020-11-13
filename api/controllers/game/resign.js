@@ -45,9 +45,7 @@ module.exports = {
 
     let roomName = `game:${inputs.id}`;
 
-    sails.sockets.join(this.req, roomName);
-
-    sails.sockets.broadcast(roomName, 'resign', { gameId: inputs.id, winner: inputs.winner }, this.req);
+    sails.sockets.broadcast(roomName, `resign-${roomName}`, { gameId: inputs.id, winner: inputs.winner }, this.req);
 
     // All done.
     return;
