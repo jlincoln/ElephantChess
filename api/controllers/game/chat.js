@@ -49,9 +49,7 @@ module.exports = {
       sails.log.info(`chat: created ${JSON.stringify(createdChat)}`);
       // setup websocket room
       let roomName = `game-chat:${inputs.id}`;
-      sails.sockets.join(this.req, roomName);
-      createdChat.created = 'just now';
-      sails.sockets.broadcast(roomName, 'chat', createdChat);
+      sails.sockets.broadcast(roomName, roomName, createdChat);
     }
 
     return;

@@ -110,7 +110,7 @@ parasails.registerComponent('game-chat', {
       );
     }
     // listen to websocket game chat room
-    io.socket.on('chat',(data) => {
+    io.socket.on(`game-chat:${this.gameId}`,(data) => {
       console.log(`chat socket event captured with ${JSON.stringify(data)}`);
       if (data.game === this.gameId) {
         this.chatMessages.unshift(data);
