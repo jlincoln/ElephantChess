@@ -14,16 +14,17 @@ parasails.registerComponent('board', {
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
   props: [
-    'id',
-    'name',
+    'archived',
+    'fen',
     'free',
+    'id',
+    'mode',
+    'name',
+    'opponent',
     'orientation',
     'showThreats',
-    'fen',
     'userSide',
-    'opponent',
-    'winner',
-    'archived'
+    'winner'
   ],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -35,7 +36,8 @@ parasails.registerComponent('board', {
       archivedGame: this.archived,
       currentFen: this.fen,
       gameWinner: this.winner,
-      hasJoinedRoom: false,
+      gameMode: this.mode.charAt(0).toUpperCase() + this.mode.slice(1).replace('_',' '),
+      hasJoinedRoom: false
     };
   },
 
@@ -47,7 +49,10 @@ parasails.registerComponent('board', {
       <div class="panel panel-default">
         <div class="panel-heading lead" style="background-color: lightgrey; border-color: black; text-align: left; padding-left: 2px;">
           <strong>{{name}}</strong>
-          Opponent: <strong>{{ opponent }}</strong>
+            Opponent: <strong>{{ opponent }}</strong>
+          <span v-if=gameMode>
+            Mode: <strong>{{ gameMode }}</strong>
+          </span>
           <span v-if=!gameWinner>
             Turn: <strong>{{ activeColor.toUpperCase() === userSide.toUpperCase() ? 'You' : 'Opponent' }}</strong>
           </span>
@@ -63,6 +68,9 @@ parasails.registerComponent('board', {
               </button>
               <button class="btn btn-outline-secondary" @click="toggleOrientation()" title="toggle board orientation" style="width: 46px;">
                <i class="fa fa-exchange fa-rotate-90" aria-hidden="true"></i>
+              </button>
+              <button class="btn btn-outline-secondary" @click="paintThreats()" :title="activeColor === userSide ? 'show attacks' : 'show threats'" style="width: 46px;">
+                <i class="fa fa-crosshairs" aria-hidden="true"></i>
               </button>
               <button class="btn btn-outline-secondary" v-if="!gameWinner" @click="resignGame()" title="resign game" style="width: 46px;">
                 <span><i class="fa fa-handshake-o"></i></span>
@@ -118,19 +126,20 @@ parasails.registerComponent('board', {
       );
     }
 
-    io.socket.on('move',(data) => {
+    io.socket.on(`move-game:${this.id}`,(data) => {
       console.log(`move socket event captured with ${JSON.stringify(data)}`);
-      if (this.id === data.gameId && this.currentFen !== data.fen) {
+      if (this.currentFen !== data.fen) {
+        console.log(`move socket event setting this.currentFen`);
         this.currentFen = data.fen;
         this.activeColor = (data.fen.split(' ')[1] === 'w') ? 'White' : 'Black';
       }
     });
 
-    io.socket.on('resign',(data) => {
+    io.socket.on(`resign-game:${this.id}`,(data) => {
       console.log(`resign socket event captured with ${JSON.stringify(data)}`);
     });
 
-    io.socket.on('archived',(data) => {
+    io.socket.on(`archive-game:${this.id}`,(data) => {
       console.log(`archived socket event captured with ${JSON.stringify(data)}`);
       this.archivedGame = true;
     });
@@ -139,6 +148,9 @@ parasails.registerComponent('board', {
       // set game to unmovable
       this.$refs.echessboard.board.state.movable.color = '';
     }
+
+    // set the game mode
+    this.$refs.echessboard.game.set_elephant_mode(this.mode);
 
   },
 
@@ -307,6 +319,10 @@ parasails.registerComponent('board', {
 
     onPromotion: function() {
       // console.log('onPromotion(data): data is ' + JSON.stringify(data));
+    },
+
+    paintThreats() {
+      this.$refs.echessboard.paintThreats();
     },
 
     placeElephant: function() {
