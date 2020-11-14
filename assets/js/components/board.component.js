@@ -36,7 +36,8 @@ parasails.registerComponent('board', {
       archivedGame: this.archived,
       currentFen: this.fen,
       gameWinner: this.winner,
-      gameMode: this.mode.charAt(0).toUpperCase() + this.mode.slice(1).replace('_',' '),
+      gameMode: this.mode.charAt(0).toUpperCase() + this.mode.slice(1).replace(/_/g,' '),
+      // gameOrientation: this.mode.orientation || 'white',
       hasJoinedRoom: false
     };
   },
@@ -130,8 +131,8 @@ parasails.registerComponent('board', {
       console.log(`move socket event captured with ${JSON.stringify(data)}`);
       if (this.currentFen !== data.fen) {
         console.log(`move socket event setting this.currentFen`);
-        this.currentFen = data.fen;
         this.activeColor = (data.fen.split(' ')[1] === 'w') ? 'White' : 'Black';
+        this.currentFen = data.fen;
       }
     });
 
@@ -249,10 +250,28 @@ parasails.registerComponent('board', {
 
       console.log('onMove(data): data is ' + JSON.stringify(data));
 
+      /*
       if (this.moveCapturedPiece() && !this.elephantPiecePlaced()) {
         this.placeElephant();
         this.setBoardUnmovable();
         return;
+      }
+      */
+
+      if (this.moveCapturedPiece()) {
+
+        if (this.mode === 'domination') {
+          if (!this.elephantPiecePlaced()) {
+            this.placeElephant();
+            this.setBoardUnmovable();
+            return;
+          }
+        } else if (this.mode === 'catch_and_release') {
+          this.placeElephant();
+          this.setBoardUnmovable();
+          return;
+        }
+
       }
 
       // set game to unmovable if active side !== userSide
@@ -266,6 +285,7 @@ parasails.registerComponent('board', {
         this.currentFen = data['fen'];
         this.activeColor = (data['fen'].split(' ')[1] === 'w') ? 'White' : 'Black';
       } else {
+        this.activeColor = (data['fen'].split(' ')[1] === 'w') ? 'White' : 'Black';
         // move already posted
         return;
       }
@@ -326,9 +346,15 @@ parasails.registerComponent('board', {
     },
 
     placeElephant: function() {
+      // remove existing elephant piece if it exists
+      let epos = this.$refs.echessboard.game.find_elephant_square();
+      if (epos) {
+        this.$refs.echessboard.game.put(null, epos);
+      }
       let square = prompt('Enter the square to place elephant (e.g. d4).');
       let result = this.$refs.echessboard.game.put({ type: this.$refs.echessboard.game.ELEPHANT, color: this.userSide[0].toLowerCase() }, square);
       if (result) {
+        console.log(`this.$refs.echessboard.game.fen() is ${this.$refs.echessboard.game.fen()}`);
         this.currentFen = this.$refs.echessboard.game.fen();
         // post the move
         io.socket.post('/api/v1/game/' + this.id + '/move',
@@ -396,6 +422,9 @@ parasails.registerComponent('board', {
     },
 
     toggleOrientation: function(){
+      // BEWARE: there is a watch set on the board component's orientation that reloads the table and causes onMove to fire
+      // this.gameOrientation = (this.gameOrientation === 'white') ? 'black' : 'white';
+      // console.log(`this.gameOrientation is ${this.gameOrientation}`);
       this.$refs.echessboard.board.toggleOrientation();
     },
 
