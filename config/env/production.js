@@ -252,7 +252,6 @@ module.exports = {
     ***************************************************************************/
     onlyAllowOrigins: [
       'http://www.elephantchess.net',
-      'https://www.elephantchess.net',
       'http://nodetest1-env.eba-cix5yirt.us-east-1.elasticbeanstalk.com',
       'http://elephantchess-env.eba-bezivni9.us-east-1.elasticbeanstalk.com/',
     //   'https://example.com',
@@ -377,7 +376,7 @@ module.exports = {
   *                                                                         *
   ***************************************************************************/
   custom: {
-    baseUrl: 'https://www.elephantchess.net/',
+    baseUrl: 'http://www.elephantchess.net/',
     internalEmailAddress: 'support@example.com',
 
     // sendgridSecret: 'SG.fake.3e0Bn0qSQVnwb1E4qNPz9JZP5vLZYqjh7sn8S93oSHU',
