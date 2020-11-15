@@ -251,6 +251,7 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     onlyAllowOrigins: [
+      'http://www.elephantchess.net',
       'https://www.elephantchess.net',
     //   'https://example.com',
     //   'https://staging.example.com',
