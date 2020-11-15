@@ -254,6 +254,7 @@ module.exports = {
       'http://www.elephantchess.net',
       'https://www.elephantchess.net',
       'http://nodetest1-env.eba-cix5yirt.us-east-1.elasticbeanstalk.com',
+      'http://elephantchess-env.eba-bezivni9.us-east-1.elasticbeanstalk.com/',
     //   'https://example.com',
     //   'https://staging.example.com',
     ],
