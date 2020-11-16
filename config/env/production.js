@@ -220,10 +220,10 @@ module.exports = {
     * https://sailsjs.com/config/session#?the-session-id-cookie                *
     *                                                                          *
     ***************************************************************************/
-    cookie: {
-      secure: true,
-      maxAge: 24 * 60 * 60 * 1000,  // 24 hours
-    },
+    // cookie: {
+      // secure: true,
+      // maxAge: 24 * 60 * 60 * 1000,  // 24 hours
+    // },
 
   },
 
@@ -251,8 +251,7 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     onlyAllowOrigins: [
-      'http://www.elephantchess.net',
-      'https://www.elephantchess.net'
+      'http://www.elephantchess.net'
     ],
 
 
@@ -325,7 +324,7 @@ module.exports = {
     * (https://sailsjs.com/config/http)                                        *
     *                                                                          *
     ***************************************************************************/
-    trustProxy: true,
+    // trustProxy: true,
 
   },
 
