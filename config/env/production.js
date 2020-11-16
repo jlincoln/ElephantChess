@@ -251,11 +251,8 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     onlyAllowOrigins: [
-      // 'http://nodetest1-env.eba-cix5yirt.us-east-1.elasticbeanstalk.com',
-      // 'http://www.elephantchess.net',
-      // 'https://www.elephantchess.net',
-    //   'https://example.com',
-    //   'https://staging.example.com',
+      'http://www.elephantchess.net',
+      'https://www.elephantchess.net'
     ],
 
 
