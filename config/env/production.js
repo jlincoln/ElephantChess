@@ -251,7 +251,9 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     onlyAllowOrigins: [
+      process.env.BASE_URL,
       'http://www.elephantchess.net',
+      'https://www.elephantchess.net',
       'https://elephant-chess.herokuapp.com',
       'http://elephantchess-env-1.eba-3wp3p2ay.us-east-1.elasticbeanstalk.com',
       'https://elephantchess-env-1.eba-3wp3p2ay.us-east-1.elasticbeanstalk.com'
