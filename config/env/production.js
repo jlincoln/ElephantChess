@@ -377,7 +377,7 @@ module.exports = {
   custom: {
     // baseUrl: 'http://www.elephantchess.net/',
     // baseUrl: 'https://elephant-chess.herokuapp.com',
-    baseUrl: process.env.BASE_URL
+    baseUrl: process.env.BASE_URL,
     // baseUrl: 'https://elephantchess-env-1.eba-3wp3p2ay.us-east-1.elasticbeanstalk.com',
     internalEmailAddress: 'support@example.com',
 
