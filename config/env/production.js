@@ -220,10 +220,10 @@ module.exports = {
     * https://sailsjs.com/config/session#?the-session-id-cookie                *
     *                                                                          *
     ***************************************************************************/
-    // cookie: {
+    cookie: {
       secure: true,
       maxAge: 24 * 60 * 60 * 1000,  // 24 hours
-    // },
+    },
 
   },
 
