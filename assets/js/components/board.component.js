@@ -250,26 +250,24 @@ parasails.registerComponent('board', {
 
       console.log('onMove(data): data is ' + JSON.stringify(data));
 
-      /*
-      if (this.moveCapturedPiece() && !this.elephantPiecePlaced()) {
-        this.placeElephant();
-        this.setBoardUnmovable();
-        return;
-      }
-      */
-
       if (this.moveCapturedPiece()) {
 
         if (this.mode === 'domination') {
           if (!this.elephantPiecePlaced()) {
-            this.placeElephant();
-            this.setBoardUnmovable();
-            return;
+            if (this.placeElephant()) {
+              this.setBoardUnmovable();
+              return;
+            } else {
+              return;
+            }
           }
         } else if (this.mode === 'catch_and_release') {
-          this.placeElephant();
-          this.setBoardUnmovable();
-          return;
+          if (this.placeElephant()) {
+            this.setBoardUnmovable();
+            return;
+          } else {
+            return;
+          }
         }
 
       }
@@ -347,15 +345,28 @@ parasails.registerComponent('board', {
 
     placeElephant: function() {
       // remove existing elephant piece if it exists
+      let placedElephant = false;
       let epos = this.$refs.echessboard.game.find_elephant_square();
       if (epos) {
         this.$refs.echessboard.game.put(null, epos);
       }
       let square = prompt('Enter the square to place elephant (e.g. d4).');
-      let result = this.$refs.echessboard.game.put({ type: this.$refs.echessboard.game.ELEPHANT, color: this.userSide[0].toLowerCase() }, square);
+      let result;
+      if (this.$refs.echessboard.game.get(square) === null) {
+        // square must be empty
+        result = this.$refs.echessboard.game.put({ type: this.$refs.echessboard.game.ELEPHANT, color: this.userSide[0].toLowerCase() }, square);
+        if (!result) {
+          alert(`Unable to place piece at ${square}!`);
+          return placedElephant;
+        }
+      } else {
+        alert(`Unable to place piece at ${square}!`);
+        return placedElephant;
+      }
       if (result) {
         console.log(`this.$refs.echessboard.game.fen() is ${this.$refs.echessboard.game.fen()}`);
         this.currentFen = this.$refs.echessboard.game.fen();
+        placedElephant = true;
         // post the move
         io.socket.post('/api/v1/game/' + this.id + '/move',
           {
@@ -382,6 +393,7 @@ parasails.registerComponent('board', {
             }
           });
       }
+      return placedElephant;
     },
 
     resignGame: function(data) {
