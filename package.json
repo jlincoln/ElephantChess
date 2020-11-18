@@ -2,7 +2,7 @@
   "name": "elephant-chess",
   "private": true,
   "version": "0.0.7",
-  "description": "a Sails application",
+  "description": "Elephant Chess",
   "keywords": [],
   "dependencies": {
     "@sailshq/connect-redis": "^3.2.1",
