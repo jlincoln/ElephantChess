@@ -29,6 +29,7 @@ module.exports = Object.assign({}, PRODUCTION_CONFIG, {
 
   datastores: Object.assign({}, PRODUCTION_CONFIG.datastores, {
     default: Object.assign({}, PRODUCTION_CONFIG.datastores.default, {
+      ssl: false,
       url: process.env.DATABASE_URL,
       // url: 'mysql://shared:some_password_everyone_knows@db.example.com:3306/my_staging_db',
       //--------------------------------------------------------------------------
