@@ -28,10 +28,17 @@ parasails.registerPage('edit-profile', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function() {
-    // Set the form data.
-    this.formData.fullName = this.me.fullName;
-    this.formData.alias = this.me.alias;
-    this.formData.emailAddress = this.me.emailChangeCandidate ? this.me.emailChangeCandidate : this.me.emailAddress;
+    _.extend(this, SAILS_LOCALS);
+    if (this.user) {
+      this.formData.fullName = this.user.fullName;
+      this.formData.alias = this.user.alias;
+      this.formData.emailAddress = this.user.emailChangeCandidate ? this.user.emailChangeCandidate : this.user.emailAddress;
+    } else {
+      // Set the form data.
+      this.formData.fullName = this.me.fullName;
+      this.formData.alias = this.me.alias;
+      this.formData.emailAddress = this.me.emailChangeCandidate ? this.me.emailChangeCandidate : this.me.emailAddress;
+    }
   },
   mounted: async function() {
     //…

@@ -32,11 +32,13 @@ module.exports.routes = {
   'GET /account':            { action: 'account/view-account-overview' },
   'GET /account/password':   { action: 'account/view-edit-password' },
   'GET /account/profile':    { action: 'account/view-edit-profile' },
+  'GET /account/:id/profile':{ action: 'account/view-edit-profile' },
 
   'GET /game/:id':           { action:  'view-games' },
   'GET /game':               { action:  'view-games' },
   'GET /games':              { action:  'view-games' },
   'GET /games-archived':     { action:  'view-games-archived' },
+  'GET /admin/accounts':     { action:  'admin/view-accounts' },
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
