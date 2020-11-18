@@ -29,8 +29,6 @@ module.exports = {
       return {};
     }
 
-    console.log(`user is ${JSON.stringify(user)}`);
-
     delete user.password;
     delete user.billingCardBrand;
     delete user.billingCardLast4;
@@ -38,8 +36,11 @@ module.exports = {
     delete user.billingCardExpYear;
     delete user.hasBillingCard;
     delete user.tosAcceptedByIp;
+    delete user.passwordResetToken;
 
-    console.log(`user is ${JSON.stringify(user)}`);
+    if (!id) {
+      delete user.isSuperAdmin;
+    }
 
     return {
       user: user

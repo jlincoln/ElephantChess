@@ -66,6 +66,9 @@
             <div style="left: auto; right: 0;" class="dropdown-menu" aria-labelledby="header-account-menu-link">
               <a class="dropdown-item" href="/account">Settings</a>
               <a class="dropdown-item" href="/logout">Sign out</a>
+              <% if (me.isSuperAdmin) { %>
+                <a class="dropdown-item" href="/admin/accounts">Administration</a>
+              <% } %>
             </div>
           </div>
           <!-- Only in mobile nav -->

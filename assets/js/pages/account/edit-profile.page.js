@@ -30,11 +30,15 @@ parasails.registerPage('edit-profile', {
   beforeMount: function() {
     _.extend(this, SAILS_LOCALS);
     if (this.user) {
+      this.formData.admin = true;
+      this.formData.id = this.user.id;
+      this.formData.isSuperAdmin = this.user.isSuperAdmin;
       this.formData.fullName = this.user.fullName;
       this.formData.alias = this.user.alias;
       this.formData.emailAddress = this.user.emailChangeCandidate ? this.user.emailChangeCandidate : this.user.emailAddress;
     } else {
       // Set the form data.
+      this.formData.admin = false;
       this.formData.fullName = this.me.fullName;
       this.formData.alias = this.me.alias;
       this.formData.emailAddress = this.me.emailChangeCandidate ? this.me.emailChangeCandidate : this.me.emailAddress;
@@ -54,7 +58,7 @@ parasails.registerPage('edit-profile', {
       // > (Note that we re-enable the syncing state here.  This is on purpose--
       // > to make sure the spinner stays there until the page navigation finishes.)
       this.syncing = true;
-      window.location = '/account';
+      window.location = (this.formData.admin) ? '/admin/accounts' : '/account';
     },
 
   }

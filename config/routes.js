@@ -61,6 +61,7 @@ module.exports.routes = {
   '/api/v1/account/logout':                              { action: 'account/logout' },
   'PUT   /api/v1/account/update-password':               { action: 'account/update-password' },
   'PUT   /api/v1/account/update-profile':                { action: 'account/update-profile' },
+  'PUT   /api/v1/admin/admin-update-profile':            { action: 'admin/admin-update-profile' },
   'PUT   /api/v1/account/update-billing-card':           { action: 'account/update-billing-card' },
   'PUT   /api/v1/entrance/login':                        { action: 'entrance/login' },
   'PUT   /api/v1/game/:id/join-chat':                    { action: 'game/join-chat' },

@@ -15,7 +15,6 @@ parasails.registerPage('accounts', {
   },
 
   mounted: async function() {
-
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
