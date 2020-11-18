@@ -49,13 +49,8 @@ module.exports.datastores = {
     *                                                                          *
     ***************************************************************************/
 
-    // url: 'postgres://echess:echess@localhost:5432/echess'
     adapter: 'sails-postgresql',
-    host: 'localhost',
-    database: 'echess',
-    port: 5432,
-    user: 'echess',
-    password: 'echess'
+    url: 'postgres://echess:echess@localhost:5432/echess'
 
   },
 
