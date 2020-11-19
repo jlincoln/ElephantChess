@@ -164,6 +164,12 @@ without necessarily having a billing card.`
       example: 1502844074211
     },
 
+    extraInfo: {
+      type: 'json',
+      description: 'extensible user info',
+      example: '{ invisible: true }'
+    },
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
