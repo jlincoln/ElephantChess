@@ -289,7 +289,10 @@ parasails.registerComponent('board', {
       }
 
       let winner = '';
-      let checkmate = this.$refs.echessboard.game.in_checkmate();
+      let checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
+      if (checkmate) {
+        winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
+      }
       let check = this.$refs.echessboard.game.in_check();
       // post the move
       io.socket.post('/api/v1/game/' + this.id + '/move',
@@ -310,7 +313,6 @@ parasails.registerComponent('board', {
               (resData, jwRes) => {
                 console.log('onMove: checkmate message: resData is ' + JSON.stringify(resData));
                 if (resData === 'OK') {
-                  winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
                   this.gameWinner = winner;
                   this.$refs.echessboard.board.state.movable.color = '';
                 } else {
