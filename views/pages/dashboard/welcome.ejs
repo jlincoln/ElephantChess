@@ -3,14 +3,23 @@
     <h1>Welcome to Elephant Chess!</h1>
     <hr/>
     <p>This is your personal homepage.</p>
-    <br>
-    <div class="stats">
-      <p>TODO: Add site announcements and stuff</p>
-      <p>TODO: Add personal and site statistics and stuff</p>
-    </div>
     <div class="buttons">
       <a class="btn btn-info" href="/games">Go To My Games</a>
       <a class="btn btn-info" href="/account/profile">Update my email</a>
+    </div>
+    <div>
+      <h3>Elephant Chess Announcements</h3>
+      <% notices.forEach(function(notice) { %>
+        <h4><%= notice.title %></h4>
+        <p><%= notice.message %></p>
+      <% }); %>
+    </div>
+    <div>
+      <h3>Your Statistics</h3>
+      <h5>Games Playing: <%= statistics.gamesPlaying %></h5>
+      <h5>Games Won: <%= statistics.gamesWon %></h5>
+      <h5>Games Lost: <%= statistics.gamesLost %></h5>
+      <h5>Site Rank: <%= statistics.siteRank %></h5>
     </div>
   </div>
 
