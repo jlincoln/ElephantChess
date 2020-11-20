@@ -40,7 +40,6 @@ module.exports.routes = {
   'GET /games-archived':     { action: 'view-games-archived' },
   'GET /admin/accounts':     { action: 'admin/view-accounts' },
   'GET /admin/notices':      { action: 'admin/view-notices' },
-  'GET /admin/:id/notice':   { action: 'admin/view-edit-notice' },
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
