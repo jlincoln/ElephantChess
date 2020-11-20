@@ -67,6 +67,10 @@ parasails.registerPage('notices', {
       return;
     },
 
+    showLocalTime(createdAt) {
+      return((new Date(createdAt).toLocaleDateString()) + ' ' + (new Date(createdAt).toLocaleTimeString()));
+    },
+
     showUpdateNoticeForm(id) {
       this.creatingOrUpdatingNotice = true;
       this.noticeDef = this.notices.filter(notice => {

@@ -13,7 +13,7 @@
     <table id="noticesTable" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
       <thead>
         <tr>
-          <th class="th-sm">Id</th>
+          <th class="th-sm">Created</th>
           <th class="th-sm">Level</th>
           <th class="th-sm">Active</th>
           <th class="th-sm">Title</th>
@@ -23,7 +23,7 @@
       </thead>
       <tbody>
         <tr v-for="notice in notices" :key="notice.id">
-          <td>{{notice.id}}</td>
+          <td>{{showLocalTime(notice.createdAt)}}</td>
           <td>{{notice.level}}</td>
           <td><input type="checkbox" v-model="notice.active" disabled></td>
           <td>{{notice.title}}</td>
@@ -33,7 +33,7 @@
       </tbody>
       <tfoot v-if="notices.length > 20">
         <tr>
-          <th class="th-sm">Id</th>
+          <th class="th-sm">Created</th>
           <th class="th-sm">Level</th>
           <th class="th-sm">Active</th>
           <th class="th-sm">Title</th>
