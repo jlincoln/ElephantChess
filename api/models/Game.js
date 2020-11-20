@@ -69,5 +69,13 @@ module.exports = {
 
   },
 
+  winnerId: function(game) {
+    if (game.winner === 'black') {
+      return game.black;
+    } else if (game.winner === 'white') {
+      return game.white;
+    }
+  },
+
 };
 

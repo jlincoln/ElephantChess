@@ -21,34 +21,41 @@ module.exports = {
 
     let notices = await Notice.find({active: true}).sort('createdAt desc');
 
-    var gamesPlaying = await Game.find({
-      archived: false,
+    let gamesPlayed = 0;
+    let gamesPlaying = 0;
+    let gamesWon = 0;
+    let gamesLost = 0;
+
+    var allPlayerGames = await Game.find({
       or: [
         { white: this.req.session.userId },
         { black: this.req.session.userId }
       ]
     });
 
-    var gamesWon = await Game.find({
-      winner: this.req.session.userId,
-      or: [
-        { white: this.req.session.userId },
-        { black: this.req.session.userId }
-      ]
-    });
-
-    var gamesLost = await Game.find({
-      winner: !this.req.session.userId,
-      or: [
-        { white: this.req.session.userId },
-        { black: this.req.session.userId }
-      ]
+    allPlayerGames.forEach(playerGame => {
+      console.log(`view-welcome playerGame is ${JSON.stringify(playerGame)}`);
+      console.log(`view-welcome Game.winnerId(playerGame) is ${Game.winnerId(playerGame)}`);
+      gamesPlayed++;
+      if (!playerGame.archived) {
+        console.log('view-welcome gamesPlaying++');
+        gamesPlaying++;
+      }
+      if (Game.winnerId(playerGame) === this.req.session.userId) {
+        console.log('view-welcome gamesWon++');
+        gamesWon++;
+      }
+      if ((Game.winnerId(playerGame) !== undefined) && (Game.winnerId(playerGame) !== this.req.session.userId)) {
+        console.log('view-welcome gamesLost++');
+        gamesLost++;
+      }
     });
 
     let statistics = {
-      gamesPlaying: gamesPlaying.length,
-      gamesWon: gamesWon.length,
-      gamesLost: gamesLost.length,
+      gamesPlayed: gamesPlayed,
+      gamesPlaying: gamesPlaying,
+      gamesWon: gamesWon,
+      gamesLost: gamesLost,
       siteRank: 'Not Available'
     };
 
