@@ -9,11 +9,13 @@
     </div>
     <br>
     <div>
-      <h3>Site Notices</h3>
-      <% notices.forEach(function(notice) { %>
-        <h4><%= notice.title %></h4>
-        <p><%= notice.message %></p>
-      <% }); %>
+      <% if (notices.length > 0) { %>
+       <h3>Site Notices</h3>
+        <% notices.forEach(function(notice) { %>
+          <h4><%= notice.title %></h4>
+          <p><%= notice.message %></p>
+        <% }); %>
+      <% } %>
     </div>
     <br>
     <div>

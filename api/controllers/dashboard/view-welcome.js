@@ -21,10 +21,34 @@ module.exports = {
 
     let notices = await Notice.find({active: true}).sort('createdAt desc');
 
+    var gamesPlaying = await Game.find({
+      archived: false,
+      or: [
+        { white: this.req.session.userId },
+        { black: this.req.session.userId }
+      ]
+    });
+
+    var gamesWon = await Game.find({
+      winner: this.req.session.userId,
+      or: [
+        { white: this.req.session.userId },
+        { black: this.req.session.userId }
+      ]
+    });
+
+    var gamesLost = await Game.find({
+      winner: !this.req.session.userId,
+      or: [
+        { white: this.req.session.userId },
+        { black: this.req.session.userId }
+      ]
+    });
+
     let statistics = {
-      gamesPlaying: 10,
-      gamesWon: 1,
-      gamesLost: 3,
+      gamesPlaying: gamesPlaying.length,
+      gamesWon: gamesWon.length,
+      gamesLost: gamesLost.length,
       siteRank: 'Not Available'
     };
 
