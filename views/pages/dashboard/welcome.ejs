@@ -7,6 +7,7 @@
       <a class="btn btn-info" href="/games">Go To My Games</a>
       <a class="btn btn-info" href="/account/profile">Update my email</a>
     </div>
+    <br>
     <div>
       <h3>Site Notices</h3>
       <% notices.forEach(function(notice) { %>
@@ -14,6 +15,7 @@
         <p><%= notice.message %></p>
       <% }); %>
     </div>
+    <br>
     <div>
       <h3>Your Statistics</h3>
       <h5>Games Playing: <%= statistics.gamesPlaying %></h5>
