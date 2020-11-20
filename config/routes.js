@@ -34,11 +34,13 @@ module.exports.routes = {
   'GET /account/profile':    { action: 'account/view-edit-profile' },
   'GET /account/:id/profile':{ action: 'account/view-edit-profile' },
 
-  'GET /game/:id':           { action:  'view-games' },
-  'GET /game':               { action:  'view-games' },
-  'GET /games':              { action:  'view-games' },
-  'GET /games-archived':     { action:  'view-games-archived' },
-  'GET /admin/accounts':     { action:  'admin/view-accounts' },
+  'GET /game/:id':           { action: 'view-games' },
+  'GET /game':               { action: 'view-games' },
+  'GET /games':              { action: 'view-games' },
+  'GET /games-archived':     { action: 'view-games-archived' },
+  'GET /admin/accounts':     { action: 'admin/view-accounts' },
+  'GET /admin/notices':      { action: 'admin/view-notices' },
+  'GET /admin/:id/notice':   { action: 'admin/view-edit-notice' },
 
   //  ╔╦╗╦╔═╗╔═╗  ╦═╗╔═╗╔╦╗╦╦═╗╔═╗╔═╗╔╦╗╔═╗   ┬   ╔╦╗╔═╗╦ ╦╔╗╔╦  ╔═╗╔═╗╔╦╗╔═╗
   //  ║║║║╚═╗║    ╠╦╝║╣  ║║║╠╦╝║╣ ║   ║ ╚═╗  ┌┼─   ║║║ ║║║║║║║║  ║ ║╠═╣ ║║╚═╗
@@ -77,5 +79,7 @@ module.exports.routes = {
   'POST  /api/v1/game/:id/resign':                       { action: 'game/resign' },
   'POST  /api/v1/game/:id/archive':                      { action: 'game/archive' },
   'POST  /api/v1/game/:id/unarchive':                    { action: 'game/unarchive' },
+  'POST  /api/v1/admin/create-notice':                   { action: 'admin/create-notice' },
+  'POST  /api/v1/admin/update-notice':                   { action: 'admin/update-notice' },
 
 };

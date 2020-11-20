@@ -42,7 +42,8 @@
     "User": true,
     "Game": true,
     "Move": true,
-    "Chat": true
+    "Chat": true,
+    "Notice": true
 
     // …and any others.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
