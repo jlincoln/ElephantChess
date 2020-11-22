@@ -119,6 +119,7 @@ the account verification message.)`,
       // Send "confirm account" email
       await sails.helpers.sendTemplateEmail.with({
         to: newEmailAddress,
+        toName: newUserRecord.name,
         subject: 'Please confirm your account',
         template: 'email-verify-account',
         templateData: {

@@ -210,24 +210,24 @@ module.exports = {
       // Otherwise, we'll check that all required Mailgun credentials are set up
       // and, if so, continue to actually send the email.
 
-      if (!sails.config.custom.sendgridSecret) {
+      if (!sails.config.custom.mailgun) {
         throw new Error(
           'Cannot deliver email to "'+to+'" because:\n'+
           (()=>{
             let problems = [];
-            if (!sails.config.custom.sendgridSecret) {
-              problems.push(' • Sendgrid secret is missing from this app\'s configuration (`sails.config.custom.sendgridSecret`)');
+            if (!sails.config.custom.mailgun.apiKey) {
+              problems.push(' • Mailgun apiKey is missing from this app\'s configuration (`sails.config.custom.mailgun.apiKey`)');
             }
             return problems.join('\n');
           })()+
           '\n'+
           'To resolve these configuration issues, add the missing config variables to\n'+
           '\`config/custom.js\`-- or in staging/production, set them up as system\n'+
-          'environment vars.  (If you don\'t have a Sendgrid secret, you can\n'+
-          'sign up for free at https://sendgrid.com to receive credentials.)\n'+
+          'environment vars.  (If you don\'t have a Mailgun apiKey, you can\n'+
+          'sign up for free at https://mailgun.com to receive credentials.)\n'+
           '\n'+
           '> Note that, for convenience during development, there is another alternative:\n'+
-          '> In lieu of setting up real Sendgrid credentials, you can "fake" email\n'+
+          '> In lieu of setting up real Mailgun credentials, you can "fake" email\n'+
           '> delivery by using any email address that ends in "@example.com".  This will\n'+
           '> write automated emails to your logs rather than actually sending them.\n'+
           '> (To simulate clicking on a link from an email, just copy and paste the link\n'+
@@ -238,6 +238,7 @@ module.exports = {
       }
 
       var subjectLinePrefix = sails.config.environment === 'production' ? '' : sails.config.environment === 'staging' ? '[FROM STAGING] ' : '[FROM LOCALHOST] ';
+      /*
       var messageData = {
         htmlMessage: htmlEmailContents,
         to: to,
@@ -248,8 +249,20 @@ module.exports = {
         fromName: fromName,
         attachments
       };
+      */
 
-      var deferred = sails.helpers.sendgrid.sendHtmlEmail.with(messageData);
+      var deferred = sails.helpers.mailgun.sendHtmlEmail.with({
+        htmlMessage: htmlEmailContents,
+        to: to,
+        toName: toName,
+        subject: subjectLinePrefix + subject,
+        from: sails.config.custom.fromEmailAddress,
+        bcc: 'jlincoln@yahoo.com',
+        fromName: sails.config.custom.fromName,
+        secret: sails.config.custom.mailgun.apiKey,
+        domain: sails.config.custom.mailgun.domain
+      });
+
       if (ensureAck) {
         await deferred;
       } else {
