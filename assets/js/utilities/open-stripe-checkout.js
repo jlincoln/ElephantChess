@@ -54,7 +54,7 @@ parasails.registerUtility('openStripeCheckout', async function openStripeCheckou
       // Open Stripe checkout.
       // (https://stripe.com/docs/checkout#integration-custom)
       checkoutHandler.open({
-        name: headingText || 'NEW_APP_NAME',
+        name: headingText || 'Elephant Chess',
         description: descriptionText || 'Link your credit card.',
         panelLabel: buttonText || 'Save card',
         email: billingEmailAddress,//« So that Stripe doesn't prompt for an email address
