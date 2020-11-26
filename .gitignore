@@ -242,3 +242,4 @@ dist
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+ElephantChess.code-workspace
