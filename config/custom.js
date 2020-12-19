@@ -81,10 +81,9 @@ module.exports.custom = {
   // signs up, or when an existing user attempts to change their email address.
   verifyEmailAddresses: true,
 
-  mailgun: {
-    apiKey: process.env.MAILGUN_API_KEY,
-    domain: process.env.MAILGUN_DOMAIN,
-    baseUrl: process.env.MAILGUN_BASE_URL
+  aws: {
+    awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
   },
 
   /**************************************************************************

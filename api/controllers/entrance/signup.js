@@ -10,7 +10,7 @@ module.exports = {
   extendedDescription:
 `This creates a new user record in the database, signs in the requesting user agent
 by modifying its [session](https://sailsjs.com/documentation/concepts/sessions), and
-(if emailing with Mailgun is enabled) sends an account verification email.
+(if emailing with AWS SES is enabled) sends an account verification email.
 
 If a verification email is sent, the new user's account is put in an "unconfirmed" state
 until they confirm they are using a legitimate email address (by clicking the link in

@@ -207,27 +207,26 @@ module.exports = {
         '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
       );
     } else {
-      // Otherwise, we'll check that all required Mailgun credentials are set up
+      // Otherwise, we'll check that all required AWS SES credentials are set up
       // and, if so, continue to actually send the email.
 
-      if (!sails.config.custom.mailgun) {
+      if (!sails.config.custom.aws) {
         throw new Error(
           'Cannot deliver email to "'+to+'" because:\n'+
           (()=>{
             let problems = [];
-            if (!sails.config.custom.mailgun.apiKey) {
-              problems.push(' • Mailgun apiKey is missing from this app\'s configuration (`sails.config.custom.mailgun.apiKey`)');
+            if (!sails.config.custom.aws.aws_access_key_id) {
+              problems.push(' • AWS aws_access_key_id is missing from this app\'s configuration (`sails.config.custom.aws.aws_access_key_id`)');
             }
             return problems.join('\n');
           })()+
           '\n'+
           'To resolve these configuration issues, add the missing config variables to\n'+
           '\`config/custom.js\`-- or in staging/production, set them up as system\n'+
-          'environment vars.  (If you don\'t have a Mailgun apiKey, you can\n'+
-          'sign up for free at https://mailgun.com to receive credentials.)\n'+
+          'environment vars.  (If you don\'t have a AWS aws_access_key_id.\n'+
           '\n'+
           '> Note that, for convenience during development, there is another alternative:\n'+
-          '> In lieu of setting up real Mailgun credentials, you can "fake" email\n'+
+          '> In lieu of setting up real AWS credentials for AWS SES, you can "fake" email\n'+
           '> delivery by using any email address that ends in "@example.com".  This will\n'+
           '> write automated emails to your logs rather than actually sending them.\n'+
           '> (To simulate clicking on a link from an email, just copy and paste the link\n'+
@@ -237,52 +236,57 @@ module.exports = {
         );
       }
 
-      var subjectLinePrefix = sails.config.environment === 'production' ? '' : sails.config.environment === 'staging' ? '[FROM STAGING] ' : '[FROM LOCALHOST] ';
-      /*
-      var messageData = {
-        htmlMessage: htmlEmailContents,
-        to: to,
-        toName: toName,
-        bcc: bcc,
-        subject: subjectLinePrefix+subject,
-        from: from,
-        fromName: fromName,
-        attachments
-      };
-      */
+      let subjectLinePrefix = sails.config.environment === 'production' ? '' : sails.config.environment === 'staging' ? '[FROM STAGING] ' : '[FROM LOCALHOST] ';
 
-      var deferred = sails.helpers.mailgun.sendHtmlEmail.with({
-        htmlMessage: htmlEmailContents,
-        to: to,
-        toName: toName,
-        subject: subjectLinePrefix + subject,
-        from: sails.config.custom.fromEmailAddress,
-        bcc: 'jlincoln@yahoo.com',
-        fromName: sails.config.custom.fromName,
-        secret: sails.config.custom.mailgun.apiKey,
-        domain: sails.config.custom.mailgun.domain
-      });
+      // Load the AWS SDK for Node.js
+      const AWS = require('aws-sdk');
+      // Set the region
+      AWS.config.update(
+        {
+          region: 'us-east-1',
+          accessKeyId: sails.config.custom.aws.awsAccessKeyId,
+          secretAccessKey: sails.config.custom.aws.awsSecretAccessKey
+        });
 
-      if (ensureAck) {
-        await deferred;
-      } else {
-        // FUTURE: take advantage of .background() here instead (when available)
-        deferred.exec((err)=>{
-          if (err) {
-            sails.log.error(
-              'Background instruction failed:  Could not deliver email:\n'+
-              util.inspect({template, templateData, to, toName, subject, from, fromName, layout, ensureAck, bcc, attachments},{depth:null})+'\n',
-              'Error details:\n'+
-              util.inspect(err)
-            );
-          } else {
-            sails.log.info(
-              'Background instruction complete:  Email sent via email delivery service (or at least queued):\n'+
-              util.inspect({to, toName, subject, from, fromName, bcc},{depth:null})
-            );
+      // Create sendEmail params
+      var params = {
+        Destination: { /* required */
+          ToAddresses: [ to ]
+        },
+        Message: { /* required */
+          Body: { /* required */
+            Html: {
+              Charset: 'UTF-8',
+              Data: htmlEmailContents
+            },
+            Text: {
+              Charset: 'UTF-8',
+              Data: ''
+            }
+          },
+          Subject: {
+            Charset: 'UTF-8',
+            Data: subjectLinePrefix + subject
           }
-        });//_∏_
-      }//ﬁ
+        },
+        Source: sails.config.custom.fromEmailAddress, /* required */
+        ReplyToAddresses: [
+          sails.config.custom.fromEmailAddress
+        ],
+      };
+
+      // Create the promise and SES service object
+      var sendPromise = new AWS.SES({apiVersion: '2010-12-01'}).sendEmail(params).promise();
+
+      // Handle promise's fulfilled/rejected states
+      sendPromise.then(
+        (data) => {
+          console.log(data.MessageId);
+        }).catch(
+          (err) => {
+            console.error(err, err.stack);
+          });
+
     }//ﬁ
 
     // All done!
