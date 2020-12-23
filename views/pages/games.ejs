@@ -57,7 +57,7 @@
         <label class="">
           Opponent:
           <select id="opponent" v-model="newGameDef.opponent" class="" required>
-            <option v-for="opponent in opponents" v-bind:value="opponent.id">{{opponent.fullName}}</option>
+            <option v-for="opponent in opponents" v-bind:value="opponent.id">{{opponent.alias}}</option>
           </select>
         </label>
         <br>

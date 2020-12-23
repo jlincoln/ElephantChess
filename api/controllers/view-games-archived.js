@@ -32,12 +32,12 @@ module.exports = {
       games[index].userId = this.req.session.userId;
       if (game.white.id === this.req.session.userId) {
         games[index].userSide = 'white';
-        games[index].opponent = game.black.alias || game.black.fullName;
+        games[index].opponent = game.black.alias;
         delete games[index].black;
         delete games[index].white;
       } else {
         games[index].userSide = 'black';
-        games[index].opponent = game.white.alias || game.white.fullName;
+        games[index].opponent = game.white.alias;
         delete games[index].black;
         delete games[index].white;
       }
