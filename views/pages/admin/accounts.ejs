@@ -9,11 +9,11 @@
     <table id="accountsTable" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
       <thead>
         <tr>
-          <th class="th-sm">Full Name</th>
-          <th class="th-sm">Alias</th>
-          <th class="th-sm">Email Address</th>
-          <th class="th-sm">Email Status</th>
-          <th class="th-sm">Admin</th>
+          <th class="th-sm">Full Name <span><i :class="fullNameClass" aria-hidden="true" @click="sortBy('fullName')"></i></span></th>
+          <th class="th-sm">Alias <span><i :class="aliasClass" aria-hidden="true" @click="sortBy('alias')"></i></span></th>
+          <th class="th-sm">Email Address <span><i :class="emailAddressClass" aria-hidden="true" @click="sortBy('emailAddress')"></i></span></th>
+          <th class="th-sm">Email Status <span><i :class="emailStatusClass" aria-hidden="true" @click="sortBy('emailStatus')"></i></span></th>
+          <th class="th-sm">Admin <span><i :class="isSuperAdminClass" aria-hidden="true" @click="sortBy('isSuperAdmin')"></i></span></th>
         </tr>
       </thead>
       <tbody>
