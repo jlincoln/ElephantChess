@@ -6,6 +6,9 @@
       <p>Manage Accounts</p>
     </div>
 
+    <input id="filter" class="form-control" type="text" placeholder="Search" aria-label="Search" v-on:keyup.enter="filter">
+    <br>
+
     <table id="accountsTable" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
       <thead>
         <tr>

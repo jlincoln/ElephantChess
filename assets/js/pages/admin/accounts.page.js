@@ -4,6 +4,7 @@ parasails.registerPage('accounts', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     users: [],
+    fullUsers: [],
     currentSortField: '',
     currentSortOrder: 'asc',
     fullNameClass: 'fa fa-sort',
@@ -18,10 +19,13 @@ parasails.registerPage('accounts', {
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function() {
     _.extend(this, SAILS_LOCALS);
-    this.users = this._marshalEntries(this.users);
+    this.fullUsers = this._marshalEntries(this.users);
+    this.users = [...this.fullUsers];
   },
 
   mounted: async function() {
+    var filterEl = document.getElementById("filter");
+    filterEl.focus(); // set focus to filter element
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -37,6 +41,16 @@ parasails.registerPage('accounts', {
       });
     },
 
+    filter() {
+      this.users = [...this.fullUsers];
+      let criteria = document.getElementById("filter").value;
+      this.users = this.users.filter((u) => {
+        if (u.fullName.concat(u.alias,u.emailAddress,u.emailStatus).includes(criteria)) {
+          return u;
+        }
+      });
+    },
+
     resetTableHeader() {
       this.fullNameClass = 'fa fa-sort';
       this.aliasClass = 'fa fa-sort';
@@ -45,7 +59,7 @@ parasails.registerPage('accounts', {
       this.isSuperAdminClass = 'fa fa-sort';
     },
 
-    sortBy(field, order) {
+    sortBy(field) {
       this.resetTableHeader();
       if (field != this.currentSortField) {
         this.currentSortOrder = 'asc'; // reset to ascending
@@ -60,7 +74,7 @@ parasails.registerPage('accounts', {
         if (a[this.currentSortField] < b[this.currentSortField]) return -1 * modifier;
         return 1 * modifier;
       });
-    }
+    },
 
   }
 });
