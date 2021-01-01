@@ -45,7 +45,7 @@ parasails.registerPage('accounts', {
       this.users = [...this.fullUsers];
       let criteria = document.getElementById("filter").value;
       this.users = this.users.filter((u) => {
-        if (u.fullName.concat(u.alias,u.emailAddress,u.emailStatus).includes(criteria)) {
+        if (u.fullName.concat(u.alias,u.emailAddress,u.emailStatus).toLowerCase().includes(criteria.toLowerCase())) {
           return u;
         }
       });
