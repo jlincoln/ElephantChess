@@ -34,19 +34,19 @@ module.exports = {
     });
 
     allPlayerGames.forEach(playerGame => {
-      console.log(`view-welcome playerGame is ${JSON.stringify(playerGame)}`);
-      console.log(`view-welcome Game.winnerId(playerGame) is ${Game.winnerId(playerGame)}`);
+      // console.log(`view-welcome playerGame is ${JSON.stringify(playerGame)}`);
+      // console.log(`view-welcome Game.winnerId(playerGame) is ${Game.winnerId(playerGame)}`);
       gamesPlayed++;
       if (!playerGame.archived) {
-        console.log('view-welcome gamesPlaying++');
+        // console.log('view-welcome gamesPlaying++');
         gamesPlaying++;
       }
       if (Game.winnerId(playerGame) === this.req.session.userId) {
-        console.log('view-welcome gamesWon++');
+        // console.log('view-welcome gamesWon++');
         gamesWon++;
       }
       if ((Game.winnerId(playerGame) !== undefined) && (Game.winnerId(playerGame) !== this.req.session.userId)) {
-        console.log('view-welcome gamesLost++');
+        // console.log('view-welcome gamesLost++');
         gamesLost++;
       }
     });
