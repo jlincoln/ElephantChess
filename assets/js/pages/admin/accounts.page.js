@@ -11,7 +11,8 @@ parasails.registerPage('accounts', {
     aliasClass: 'fa fa-sort',
     emailAddressClass: 'fa fa-sort',
     emailStatusClass: 'fa fa-sort',
-    isSuperAdminClass: 'fa fa-sort'
+    isSuperAdminClass: 'fa fa-sort',
+    isDisabledClass: 'fa fa-sort',
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -57,6 +58,7 @@ parasails.registerPage('accounts', {
       this.emailAddressClass = 'fa fa-sort';
       this.emailStatusClass = 'fa fa-sort';
       this.isSuperAdminClass = 'fa fa-sort';
+      this.isDisabledClass = 'fa fa-sort';
     },
 
     sortBy(field) {

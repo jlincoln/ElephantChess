@@ -33,6 +33,7 @@ parasails.registerPage('edit-profile', {
       this.formData.admin = true;
       this.formData.id = this.user.id;
       this.formData.isSuperAdmin = this.user.isSuperAdmin;
+      this.formData.isDisabled = this.user.isDisabled;
       this.formData.fullName = this.user.fullName;
       this.formData.alias = this.user.alias;
       this.formData.emailAddress = this.user.emailChangeCandidate ? this.user.emailChangeCandidate : this.user.emailAddress;

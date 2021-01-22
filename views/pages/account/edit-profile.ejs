@@ -27,6 +27,10 @@
             <input type="checkbox" class="form-check-input" id="admin" name="admin" v-model="formData.isSuperAdmin">
             <label class="form-check-label" for="admin">Administrator</label>
           </div>
+          <div v-show="formData.admin" class="form-check">
+            <input type="checkbox" class="form-check-input" id="disabled" name="disabled" v-model="formData.isDisabled">
+            <label class="form-check-label" for="disabled">Disabled</label>
+          </div>
         </div>
       </div>
       <div class="row">

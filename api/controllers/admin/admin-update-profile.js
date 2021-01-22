@@ -29,6 +29,10 @@ module.exports = {
       type: 'boolean'
     },
 
+    isDisabled: {
+      type: 'boolean'
+    },
+
   },
 
 
@@ -42,7 +46,7 @@ module.exports = {
   },
 
 
-  fn: async function ({id, fullName, alias, emailAddress, isSuperAdmin}) {
+  fn: async function ({id, fullName, alias, emailAddress, isSuperAdmin, isDisabled}) {
 
     console.log(`admin-update-profile id is ${id}`);
 
@@ -98,6 +102,7 @@ module.exports = {
       fullName,
       alias,
       isSuperAdmin,
+      isDisabled,
     };
 
     switch (desiredEmailEffect) {

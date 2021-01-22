@@ -17,6 +17,7 @@
           <th class="th-sm">Email Address <span><i :class="emailAddressClass" aria-hidden="true" @click="sortBy('emailAddress')"></i></span></th>
           <th class="th-sm">Email Status <span><i :class="emailStatusClass" aria-hidden="true" @click="sortBy('emailStatus')"></i></span></th>
           <th class="th-sm">Admin <span><i :class="isSuperAdminClass" aria-hidden="true" @click="sortBy('isSuperAdmin')"></i></span></th>
+          <th class="th-sm">Disabled <span><i :class="isDisabledClass" aria-hidden="true" @click="sortBy('isDisabled')"></i></span></th>
         </tr>
       </thead>
       <tbody>
@@ -26,6 +27,7 @@
           <td>{{user.emailAddress}}</td>
           <td>{{user.emailStatus}}</td>
           <td><input type="checkbox" v-model="user.isSuperAdmin" disabled></td>
+          <td><input type="checkbox" v-model="user.isDisabled" disabled></td>
         </tr>
       </tbody>
       <tfoot v-if="users.length > 20">
@@ -35,6 +37,7 @@
           <th>Email Address</th>
           <th>Email Status</th>
           <th>Administrator</th>
+          <th>Disabled</th>
         </tr>
       </tfoot>
     </table>
