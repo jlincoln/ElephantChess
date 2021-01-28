@@ -37,6 +37,7 @@ module.exports.routes = {
   'GET /game/:id':           { action: 'view-games' },
   'GET /game':               { action: 'view-games' },
   'GET /games':              { action: 'view-games' },
+  'GET /games/:playerId':    { action: 'view-games' },
   'GET /games-archived':     { action: 'view-games-archived' },
   'GET /admin/accounts':     { action: 'admin/view-accounts' },
   'GET /admin/notices':      { action: 'admin/view-notices' },

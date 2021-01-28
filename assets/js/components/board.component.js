@@ -61,7 +61,7 @@ parasails.registerComponent('board', {
             Winner: <strong>{{ userSide.toUpperCase() === gameWinner.toUpperCase() ? 'You' : 'Opponent' }}</strong>
           </span>
         </div>
-        <div class="panel-heading" style="border-color: lightgrey; border-style: solid; border-width: thin; padding-left: 2px;">
+        <div v-if=userSide class="panel-heading" style="border-color: lightgrey; border-style: solid; border-width: thin; padding-left: 2px;">
           <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups"> 
             <div class="btn-group mr-2" role="group" aria-label="First group">
               <button class="btn btn-outline-secondary" :title="'You are playing the ' + userSide + ' side.'" @click="showGameSide()" style="width: 46px;">

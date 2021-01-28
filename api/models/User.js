@@ -186,7 +186,17 @@ without necessarily having a billing card.`
     chats: {
       collection: 'chat',
       via: 'sender'
-    }
+    },
+
+    gamesAsWhite: {
+      collection: 'game',
+      via: 'white'
+    },
+
+    gamesAsBlack: {
+      collection: 'game',
+      via: 'black'
+    },
 
   },
 

@@ -4,6 +4,17 @@ module.exports = {
 
   description: 'Display "Chess games" page.',
 
+  inputs: {
+    playerId: {
+      type: 'number',
+      description: 'id of player',
+    },
+    id: {
+      type: 'number',
+      description: 'id of game',
+    },
+  },
+
   exits: {
 
     success: {
@@ -12,44 +23,77 @@ module.exports = {
 
   },
 
-  fn: async function () {
+  fn: async function(req) {
 
-    // Get the list of things this user can see.
-    var games = await Game.find({
-      archived: false,
-      or: [
-        { white: this.req.session.userId },
-        { black: this.req.session.userId }
-      ]
-    })
-    .populate('white')
-    .populate('black')
-    .populate('chats', { sort: 'createdAt desc', limit: 100 } );
+    var games;
+    var opponents;
 
-    var opponents = await User.find({
-      id: {'!=': this.req.session.userId}
-    });
+    sails.log(`req is ${JSON.stringify(req)}`);
 
-    _.each(opponents, (opponent, index) => {
-      opponents[index] = _.pick(opponent, ['id','alias']);
-    });
+    // Get the set of games
+    if (req.playerId) {
+      sails.log(`req.playerId is ${JSON.stringify(req.playerId)}`);
+      this.req.playerId = req.playerId;
+      games = await Game.find({
+        // archived: false,
+        or: [
+          { white: this.req.playerId },
+          { black: this.req.playerId },
+        ]
+      })
+      .populate('white')
+      .populate('black');
 
-    // set activeColor attribute based upon segment 2 of FEN
-    _.each(games, (game, index) => {
-      games[index].activeColor = game.currentFEN.split(' ')[1];
-      games[index].userId = this.req.session.userId;
-      if (game.white.id === this.req.session.userId) {
-        games[index].userSide = 'white';
+      // set activeColor attribute based upon segment 2 of FEN
+      _.each(games, (game, index) => {
+        games[index].activeColor = game.currentFEN.split(' ')[1];
+        games[index].userId = '';
+        games[index].userSide = '';
         games[index].opponent = game.black.alias;
+        if (game.white.id === this.req.playerId) {
+          games[index].opponent = game.black.alias;
+        } else {
+          games[index].opponent = game.white.alias;
+        }
         delete games[index].black;
         delete games[index].white;
-      } else {
-        games[index].userSide = 'black';
-        games[index].opponent = game.white.alias;
+      });
+
+    } else {
+      games = await Game.find({
+        archived: false,
+        or: [
+          { white: this.req.session.userId },
+          { black: this.req.session.userId },
+        ]
+      })
+      .populate('white')
+      .populate('black')
+      .populate('chats', { sort: 'updatedAt desc', limit: 100 } );
+
+      opponents = await User.find({
+        id: {'!=': this.req.session.userId}
+      });
+
+      _.each(opponents, (opponent, index) => {
+        opponents[index] = _.pick(opponent, ['id','alias']);
+      });
+
+      // set activeColor attribute based upon segment 2 of FEN
+      _.each(games, (game, index) => {
+        games[index].activeColor = game.currentFEN.split(' ')[1];
+        games[index].userId = this.req.session.userId;
+        if (game.white.id === this.req.session.userId) {
+          games[index].userSide = 'white';
+          games[index].opponent = game.black.alias;
+        } else {
+          games[index].userSide = 'black';
+          games[index].opponent = game.white.alias;
+        }
         delete games[index].black;
         delete games[index].white;
-      }
-    });
+      });
+    }
 
     // sails.log(`games is ${JSON.stringify(games)}`);
 

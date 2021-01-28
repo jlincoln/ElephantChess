@@ -13,6 +13,7 @@ parasails.registerPage('accounts', {
     emailStatusClass: 'fa fa-sort',
     isSuperAdminClass: 'fa fa-sort',
     isDisabledClass: 'fa fa-sort',
+    totalGamesCountClass: 'fa fa-sort',
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -22,10 +23,11 @@ parasails.registerPage('accounts', {
     _.extend(this, SAILS_LOCALS);
     this.fullUsers = this._marshalEntries(this.users);
     this.users = [...this.fullUsers];
+    console.log(`users is ${JSON.stringify(this.users)}`);
   },
 
   mounted: async function() {
-    var filterEl = document.getElementById("filter");
+    var filterEl = document.getElementById('filter');
     filterEl.focus(); // set focus to filter element
   },
 
@@ -44,7 +46,7 @@ parasails.registerPage('accounts', {
 
     filter() {
       this.users = [...this.fullUsers];
-      let criteria = document.getElementById("filter").value;
+      let criteria = document.getElementById('filter').value;
       this.users = this.users.filter((u) => {
         if (u.fullName.concat(u.alias,u.emailAddress,u.emailStatus).toLowerCase().includes(criteria.toLowerCase())) {
           return u;
@@ -59,11 +61,12 @@ parasails.registerPage('accounts', {
       this.emailStatusClass = 'fa fa-sort';
       this.isSuperAdminClass = 'fa fa-sort';
       this.isDisabledClass = 'fa fa-sort';
+      this.totalGamesCountClass = 'fa fa-sort';
     },
 
     sortBy(field) {
       this.resetTableHeader();
-      if (field != this.currentSortField) {
+      if (field !== this.currentSortField) {
         this.currentSortOrder = 'asc'; // reset to ascending
       } else {
         this.currentSortOrder = this.currentSortOrder === 'asc' ? 'desc' : 'asc';
@@ -72,8 +75,12 @@ parasails.registerPage('accounts', {
       this.currentSortField = field;
       this.users.sort((a,b) => {
         let modifier = 1;
-        if (this.currentSortOrder === 'desc') modifier = -1;
-        if (a[this.currentSortField] < b[this.currentSortField]) return -1 * modifier;
+        if (this.currentSortOrder === 'desc') {
+          modifier = -1;
+        }
+        if (a[this.currentSortField] < b[this.currentSortField]) {
+          return -1 * modifier;
+        }
         return 1 * modifier;
       });
     },
