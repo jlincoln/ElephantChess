@@ -251,9 +251,6 @@ parasails.registerComponent('board', {
 
     onMove: async function(data) {
 
-      // console.log('onMove(data): data is ' + JSON.stringify(data));
-
-
       if (this.moveCapturedPiece() && !(this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over())) {
 
         if (this.mode === 'domination') {
