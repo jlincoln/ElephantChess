@@ -32,6 +32,7 @@ parasails.registerComponent('board', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function () {
     let activeColor = (this.fen.split(' ')[1] === 'w') ? 'White' : 'Black';
+    let turn = activeColor.toUpperCase() === this.userSide.toUpperCase() ? 'You' : 'Opponent';
     return {
       activeColor: activeColor,
       archivedGame: this.archived,
@@ -40,7 +41,7 @@ parasails.registerComponent('board', {
       gameMode: this.mode.charAt(0).toUpperCase() + this.mode.slice(1).replace(/_/g,' '),
       // gameOrientation: this.mode.orientation || 'white',
       hasJoinedRoom: false,
-      turn: activeColor.toUpperCase() === this.userSide.toUpperCase() ? 'You' : 'Opponent',
+      turn: turn, // TODO: Why is turn not dynamically bound when used in !gameWinner and panle-heading style?
     };
   },
 
@@ -50,7 +51,7 @@ parasails.registerComponent('board', {
   template: `
     <div :id="'board-component-div-' + id" :name="'board-component-div-' + name">
       <div class="panel panel-default">
-        <div class="panel-heading lead" :style="'background-color: ' + (turn === 'You' ? 'lightgreen' : 'lightgrey') + '; border-color: black; text-align: left; padding-left: 2px;'">
+        <div class="panel-heading lead" :style="'background-color: ' + (activeColor.toUpperCase() === userSide.toUpperCase() && !winner ? 'lightgreen' : 'lightgrey') + '; border-color: black; text-align: left; padding-left: 2px;'">
           <strong>{{name}}</strong>
             Opponent: <strong>{{ opponent }}</strong>
           <span v-if=gameMode>
