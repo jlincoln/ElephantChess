@@ -23,7 +23,6 @@ parasails.registerPage('accounts', {
     _.extend(this, SAILS_LOCALS);
     this.fullUsers = this._marshalEntries(this.users);
     this.users = [...this.fullUsers];
-    console.log(`users is ${JSON.stringify(this.users)}`);
   },
 
   mounted: async function() {
