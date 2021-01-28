@@ -293,6 +293,8 @@ parasails.registerComponent('board', {
 
       let winner = '';
       let checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
+      let history = this.$refs.echessboard.game.history({verbose: true});
+      let moveText = (history[history.length-1]);
       if (checkmate) {
         winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
       }
@@ -328,6 +330,19 @@ parasails.registerComponent('board', {
               {
                 _csrf: window.SAILS_LOCALS._csrf,
                 message: 'check'
+              },
+              (resData, jwRes) => {
+                console.log('onMove: check message: resData is ' + JSON.stringify(resData));
+                if (resData !== 'OK') {
+                  console.log('onMove: check message: jwRes is ' + JSON.stringify(jwRes));
+                }
+              }
+            );
+          } else {
+            io.socket.post('/api/v1/game/' + this.id + '/chat',
+              {
+                _csrf: window.SAILS_LOCALS._csrf,
+                message: 'move from ' + moveText.from + ' to ' + moveText.to,
               },
               (resData, jwRes) => {
                 console.log('onMove: check message: resData is ' + JSON.stringify(resData));
@@ -413,17 +428,19 @@ parasails.registerComponent('board', {
             winner: winner,
             _csrf: window.SAILS_LOCALS._csrf
           },
-          (resData, jwRes) => {
-            console.log('resign: resData is ' + JSON.stringify(resData));
-            console.log('resign: jwRes is ' + JSON.stringify(jwRes));
+          () => {
+          // (resData, jwRes) => {
+            // console.log('resign: resData is ' + JSON.stringify(resData));
+            // console.log('resign: jwRes is ' + JSON.stringify(jwRes));
             io.socket.post('/api/v1/game/' + this.id + '/chat',
               {
                 message: 'resigned game',
                 _csrf: window.SAILS_LOCALS._csrf
               },
-              (resData, jwRes) => {
-                console.log('resign message: resData is ' + JSON.stringify(resData));
-                console.log('resign message: jwRes is ' + JSON.stringify(jwRes));
+              () => {
+              // (resData, jwRes) => {
+                // console.log('resign message: resData is ' + JSON.stringify(resData));
+                // console.log('resign message: jwRes is ' + JSON.stringify(jwRes));
               }
             );
           });
