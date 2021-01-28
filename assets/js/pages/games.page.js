@@ -9,6 +9,7 @@ parasails.registerPage('games', {
     cloudError: '',
     formErrors: { /* … */ },
     games: [],
+    fullGames: [],
     hasJoinedMyGamesRoom: false,
     newGameDef: {
       name: undefined,
@@ -27,7 +28,8 @@ parasails.registerPage('games', {
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function() {
     _.extend(this, SAILS_LOCALS);
-    this.games = this._marshalEntries(this.games);
+    this.fullGames = this._marshalEntries(this.games);
+    this.games = [...this.fullGames];
     this.opponents = this._marshalEntries(this.opponents);
   },
 
@@ -51,6 +53,10 @@ parasails.registerPage('games', {
       alert(`${data.opponent} has challenged you to a new game. Refresh the page to begin.`);
     });
 
+    var filterEl = document.getElementById('filter');
+    filterEl.focus(); // set focus to filter element
+
+
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -71,9 +77,14 @@ parasails.registerPage('games', {
       // this.goto('/games');
     },
 
-    openCreateGameForm: function() {
-      this.creatingGame = true;
-      return;
+    filter() {
+      this.games = [...this.fullGames];
+      let criteria = document.getElementById('filter').value;
+      this.games = this.games.filter((g) => {
+        if (g.name.concat(g.opponent,g.userSide,g.mode).toLowerCase().includes(criteria.toLowerCase())) {
+          return g;
+        }
+      });
     },
 
     handleParsingCreateGameForm: function(argins) {
@@ -82,6 +93,11 @@ parasails.registerPage('games', {
       this.formErrors = {};
 
       return argins;
+    },
+
+    openCreateGameForm: function() {
+      this.creatingGame = true;
+      return;
     },
 
     showThreats: function() {
@@ -98,7 +114,6 @@ parasails.registerPage('games', {
       this.goto('games');
       return;
     },
-
 
   }
 

@@ -31,14 +31,16 @@ parasails.registerComponent('board', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function () {
+    let activeColor = (this.fen.split(' ')[1] === 'w') ? 'White' : 'Black';
     return {
-      activeColor: (this.fen.split(' ')[1] === 'w') ? 'White' : 'Black',
+      activeColor: activeColor,
       archivedGame: this.archived,
       currentFen: this.fen,
       gameWinner: this.winner,
       gameMode: this.mode.charAt(0).toUpperCase() + this.mode.slice(1).replace(/_/g,' '),
       // gameOrientation: this.mode.orientation || 'white',
-      hasJoinedRoom: false
+      hasJoinedRoom: false,
+      turn: activeColor.toUpperCase() === this.userSide.toUpperCase() ? 'You' : 'Opponent',
     };
   },
 
@@ -46,9 +48,9 @@ parasails.registerComponent('board', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-    <div :id="'board-component-div-' + id" :name="'board-component-div-' + (name||'')">
+    <div :id="'board-component-div-' + id" :name="'board-component-div-' + name">
       <div class="panel panel-default">
-        <div class="panel-heading lead" style="background-color: lightgrey; border-color: black; text-align: left; padding-left: 2px;">
+        <div class="panel-heading lead" :style="'background-color: ' + (turn === 'You' ? 'lightgreen' : 'lightgrey') + '; border-color: black; text-align: left; padding-left: 2px;'">
           <strong>{{name}}</strong>
             Opponent: <strong>{{ opponent }}</strong>
           <span v-if=gameMode>
@@ -58,7 +60,7 @@ parasails.registerComponent('board', {
             Turn: <strong>{{ activeColor.toUpperCase() === userSide.toUpperCase() ? 'You' : 'Opponent' }}</strong>
           </span>
           <span v-if=gameWinner>
-            Winner: <strong>{{ userSide.toUpperCase() === gameWinner.toUpperCase() ? 'You' : 'Opponent' }}</strong>
+            Winner: <strong>{{ turn }}</strong>
           </span>
         </div>
         <div v-if=userSide class="panel-heading" style="border-color: lightgrey; border-style: solid; border-width: thin; padding-left: 2px;">
