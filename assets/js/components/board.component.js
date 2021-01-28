@@ -340,7 +340,7 @@ parasails.registerComponent('board', {
             io.socket.post('/api/v1/game/' + this.id + '/chat',
               {
                 _csrf: window.SAILS_LOCALS._csrf,
-                message: 'move from ' + moveText.from + ' to ' + moveText.to,
+                message: moveText.san,
               },
               (resData, jwRes) => {
                 console.log('onMove: check message: resData is ' + JSON.stringify(resData));
