@@ -95,23 +95,22 @@ parasails.registerComponent('game-chat', {
   },
 
   mounted: function (){
-    console.log('mounted, creating game chat socket subscription for gameId ' + this.gameId);
     if (!this.hasJoinedRoom) {
       // join game chat room
       io.socket.put('/api/v1/game/' + this.gameId + '/join-chat',
           {
             _csrf: window.SAILS_LOCALS._csrf
           },
-          (resData, jwRes) => {
-            console.log('mounted: join-chat resData is ' + JSON.stringify(resData));
-            console.log('mounted: join-chat jwRes is ' + JSON.stringify(jwRes));
+          () => {
+          // (resData, jwRes) => {
+            // console.log('mounted: join-chat resData is ' + JSON.stringify(resData));
+            // console.log('mounted: join-chat jwRes is ' + JSON.stringify(jwRes));
             this.hasJoinedRoom = true;
           }
       );
     }
     // listen to websocket game chat room
     io.socket.on(`game-chat:${this.gameId}`,(data) => {
-      console.log(`chat socket event captured with ${JSON.stringify(data)}`);
       if (data.game === this.gameId) {
         this.chatMessages.unshift(data);
       }
@@ -135,17 +134,14 @@ parasails.registerComponent('game-chat', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     sendMessage: function() {
-      // console.log('sendMessage');
       if (this.message === '') { return; }
       io.socket.post('/api/v1/game/' + this.gameId + '/chat',
         {
           message: this.message,
           _csrf: window.SAILS_LOCALS._csrf
         },
-        (resData, jwRes) => {
-          console.log('resData is ' + JSON.stringify(resData));
-          console.log('jwRes is ' + JSON.stringify(jwRes));
-
+        () => {
+        // (resData, jwRes) => {
           this.message = '';
           document.getElementById('chatMessage-'+this.gameId).focus();
         }
