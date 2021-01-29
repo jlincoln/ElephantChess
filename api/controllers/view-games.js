@@ -72,7 +72,8 @@ module.exports = {
       .populate('chats', { sort: 'updatedAt desc', limit: 100 } );
 
       opponents = await User.find({
-        id: {'!=': this.req.session.userId}
+        id: {'!=': this.req.session.userId},
+        isDisabled: false,
       });
 
       _.each(opponents, (opponent, index) => {
