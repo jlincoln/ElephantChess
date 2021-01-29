@@ -18,6 +18,7 @@
           <th class="th-sm">Email Status <span><i :class="emailStatusClass" aria-hidden="true" @click="sortBy('emailStatus')"></i></span></th>
           <th class="th-sm">Admin <span><i :class="isSuperAdminClass" aria-hidden="true" @click="sortBy('isSuperAdmin')"></i></span></th>
           <th class="th-sm">Disabled <span><i :class="isDisabledClass" aria-hidden="true" @click="sortBy('isDisabled')"></i></span></th>
+          <th class="th-sm">Last Seen <span><i :class="lastSeenAtClass" aria-hidden="true" @click="sortBy('lastSeenAt')"></i></span></th>
           <th class="th-sm">Total Games <span><i :class="totalGamesCountClass" aria-hidden="true" @click="sortBy('totalGamesCount')"></i></span></th>
         </tr>
       </thead>
@@ -29,6 +30,7 @@
           <td>{{user.emailStatus}}</td>
           <td><input type="checkbox" v-model="user.isSuperAdmin" disabled></td>
           <td><input type="checkbox" v-model="user.isDisabled" disabled></td>
+          <td>{{ (new Date(user.lastSeenAt).toLocaleDateString()) + ' ' + (new Date(user.lastSeenAt).toLocaleTimeString()) }} </td>
           <td><a style="width: 150px" class="" :href="`/games/${user.id}`">{{user.totalGamesCount}}</a></td>
         </tr>
       </tbody>
@@ -40,6 +42,7 @@
           <th>Email Status</th>
           <th>Administrator</th>
           <th>Disabled</th>
+          <th>last Seen</th>
           <th>Total Games</th>
         </tr>
       </tfoot>

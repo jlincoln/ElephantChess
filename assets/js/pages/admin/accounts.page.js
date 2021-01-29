@@ -13,6 +13,7 @@ parasails.registerPage('accounts', {
     emailStatusClass: 'fa fa-sort',
     isSuperAdminClass: 'fa fa-sort',
     isDisabledClass: 'fa fa-sort',
+    lastSeenAtClass: 'fa fa-sort',
     totalGamesCountClass: 'fa fa-sort',
   },
 
