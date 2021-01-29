@@ -304,9 +304,10 @@ parasails.registerComponent('board', {
           fen: this.currentFen,
           winner: winner
         },
-        (resData, jwRes) => {
-          console.log('resData is ' + JSON.stringify(resData));
-          console.log('jwRes is ' + JSON.stringify(jwRes));
+        // (resData, jwRes) => {
+        (resData) => {
+          // console.log('resData is ' + JSON.stringify(resData));
+          // console.log('jwRes is ' + JSON.stringify(jwRes));
           if (resData === 'OK' && checkmate) {
             io.socket.post('/api/v1/game/' + this.id + '/chat',
               {
@@ -314,7 +315,7 @@ parasails.registerComponent('board', {
                 message: 'checkmate'
               },
               (resData, jwRes) => {
-                console.log('onMove: checkmate message: resData is ' + JSON.stringify(resData));
+                // console.log('onMove: checkmate message: resData is ' + JSON.stringify(resData));
                 if (resData === 'OK') {
                   this.gameWinner = winner;
                   this.$refs.echessboard.board.state.movable.color = '';
@@ -330,7 +331,7 @@ parasails.registerComponent('board', {
                 message: 'check'
               },
               (resData, jwRes) => {
-                console.log('onMove: check message: resData is ' + JSON.stringify(resData));
+                // console.log('onMove: check message: resData is ' + JSON.stringify(resData));
                 if (resData !== 'OK') {
                   console.log('onMove: check message: jwRes is ' + JSON.stringify(jwRes));
                 }
@@ -343,7 +344,7 @@ parasails.registerComponent('board', {
                 message: moveText.san,
               },
               (resData, jwRes) => {
-                console.log('onMove: check message: resData is ' + JSON.stringify(resData));
+                // console.log('onMove: check message: resData is ' + JSON.stringify(resData));
                 if (resData !== 'OK') {
                   console.log('onMove: check message: jwRes is ' + JSON.stringify(jwRes));
                 }
