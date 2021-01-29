@@ -255,23 +255,25 @@ parasails.registerComponent('board', {
 
       if (this.moveCapturedPiece() && !checkmate) {
 
+        let placedElephant = false;
         if (this.mode === 'domination') {
           if (!this.elephantPiecePlaced()) {
-            if (this.placeElephant()) {
-              this.setBoardUnmovable();
-              return;
-            } else {
-              return;
+            while (!placedElephant) {
+              placedElephant = this.placeElephant();
             }
-          }
-        } else if (this.mode === 'catch_and_release') {
-          if (this.placeElephant()) {
             checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
             if (!checkmate) {
               this.setBoardUnmovable();
               return;
             }
-          } else {
+          }
+        } else if (this.mode === 'catch_and_release') {
+          while (!placedElephant) {
+            placedElephant = this.placeElephant();
+          }
+          checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
+          if (!checkmate) {
+            this.setBoardUnmovable();
             return;
           }
         }
