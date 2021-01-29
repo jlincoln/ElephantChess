@@ -251,7 +251,9 @@ parasails.registerComponent('board', {
 
     onMove: async function(data) {
 
-      if (this.moveCapturedPiece() && !(this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over())) {
+      let checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
+
+      if (this.moveCapturedPiece() && !checkmate) {
 
         if (this.mode === 'domination') {
           if (!this.elephantPiecePlaced()) {
@@ -264,8 +266,11 @@ parasails.registerComponent('board', {
           }
         } else if (this.mode === 'catch_and_release') {
           if (this.placeElephant()) {
-            this.setBoardUnmovable();
-            return;
+            checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
+            if (!checkmate) {
+              this.setBoardUnmovable();
+              return;
+            }
           } else {
             return;
           }
@@ -290,7 +295,6 @@ parasails.registerComponent('board', {
       }
 
       let winner = '';
-      let checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
       let history = this.$refs.echessboard.game.history({verbose: true});
       let moveText = (history[history.length-1]);
       if (checkmate) {
