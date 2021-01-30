@@ -113,18 +113,16 @@ parasails.registerComponent('board', {
 
   mounted: async function() {
 
-    console.log('mounted: ');
-
     if (!this.hasJoinedRoom) {
       // join game room
-      console.log('mounted: joining game room');
       io.socket.put('/api/v1/game/' + this.id + '/join-game',
         {
           _csrf: window.SAILS_LOCALS._csrf
         },
-        (resData, jwRes) => {
-          console.log('mounted: join-game resData is ' + JSON.stringify(resData));
-          console.log('mounted: join-game jwRes is ' + JSON.stringify(jwRes));
+        () => {
+        // (resData, jwRes) => {
+          // console.log('mounted: join-game resData is ' + JSON.stringify(resData));
+          // console.log('mounted: join-game jwRes is ' + JSON.stringify(jwRes));
           this.hasJoinedRoom = true;
         }
       );
@@ -184,9 +182,10 @@ parasails.registerComponent('board', {
             id: this.id,
             _csrf: window.SAILS_LOCALS._csrf
           },
-          (resData, jwRes) => {
-            console.log('archive: resData is ' + JSON.stringify(resData));
-            console.log('archive: jwRes is ' + JSON.stringify(jwRes));
+          () => {
+          // (resData, jwRes) => {
+            // console.log('archive: resData is ' + JSON.stringify(resData));
+            // console.log('archive: jwRes is ' + JSON.stringify(jwRes));
             io.socket.post('/api/v1/game/' + this.id + '/chat',
               {
                 message: 'archived game',
@@ -252,6 +251,7 @@ parasails.registerComponent('board', {
     onMove: async function(data) {
 
       let checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
+      let winner = '';
 
       if (this.moveCapturedPiece() && !checkmate) {
 
@@ -262,7 +262,10 @@ parasails.registerComponent('board', {
               placedElephant = this.placeElephant();
             }
             checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
-            if (!checkmate) {
+            if (checkmate) {
+              winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
+              data['fen'] = this.$refs.echessboard.game.fen();
+            } else {
               this.setBoardUnmovable();
               return;
             }
@@ -272,7 +275,10 @@ parasails.registerComponent('board', {
             placedElephant = this.placeElephant();
           }
           checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
-          if (!checkmate) {
+          if (checkmate) {
+            winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
+            data['fen'] = this.$refs.echessboard.game.fen();
+          } else {
             this.setBoardUnmovable();
             return;
           }
@@ -296,12 +302,13 @@ parasails.registerComponent('board', {
         return;
       }
 
-      let winner = '';
       let history = this.$refs.echessboard.game.history({verbose: true});
       let moveText = (history[history.length-1]);
-      if (checkmate) {
+
+      if (checkmate && winner === '') {
         winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
       }
+
       let check = this.$refs.echessboard.game.in_check();
       // post the move
       io.socket.post('/api/v1/game/' + this.id + '/move',
@@ -375,6 +382,7 @@ parasails.registerComponent('board', {
       if (epos) {
         this.$refs.echessboard.game.put(null, epos);
       }
+
       let square = prompt('Enter the square to place elephant (e.g. d4).');
       let result;
       if (this.$refs.echessboard.game.get(square) === null) {
@@ -388,8 +396,9 @@ parasails.registerComponent('board', {
         alert(`Unable to place piece at ${square}!`);
         return placedElephant;
       }
+
       if (result) {
-        console.log(`this.$refs.echessboard.game.fen() is ${this.$refs.echessboard.game.fen()}`);
+        // console.log(`this.$refs.echessboard.game.fen() is ${this.$refs.echessboard.game.fen()}`);
         this.currentFen = this.$refs.echessboard.game.fen();
         placedElephant = true;
         // post the move
@@ -414,7 +423,7 @@ parasails.registerComponent('board', {
                 }
               );
             } else {
-              console.log('placeElephant: added elephant message resData nopt OK jwRes is ' + JSON.stringify(jwRes));
+              console.log('placeElephant: added elephant message resData not OK jwRes is ' + JSON.stringify(jwRes));
             }
           });
       }
