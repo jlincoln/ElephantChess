@@ -19,7 +19,7 @@ module.exports = function(grunt) {
     'concat',
     'uglify',
     'cssmin',
-    'sails-linker:prodJs',
+    'sails-linker:prodJsBuild',
     'sails-linker:prodStyles',
   ]);
 };
