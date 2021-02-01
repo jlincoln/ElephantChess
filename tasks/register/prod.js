@@ -19,8 +19,9 @@ module.exports = function(grunt) {
     'concat',
     'uglify',
     'cssmin',
-    'sails-linker:prodJsBuild',
-    'sails-linker:prodStylesBuild',
+    'hash',//« Cache-busting
+    'copy:beforeLinkBuildProd',//« For prettier URLs after cache-busting
+    'linkAssetsBuildProd'
   ]);
 };
 
