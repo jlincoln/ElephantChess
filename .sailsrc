@@ -1,9 +1,1 @@
-{
-  "generators": {
-    "modules": {}
-  },
-  "_generatedWith": {
-    "sails": "1.2.5",
-    "sails-generate": "2.0.0"
-  }
-}
+{"generators":{"modules":{}},"_generatedWith":{"sails":"1.2.5","sails-generate":"2.0.0"},"paths":{"public":"./.www"},"hooks":{"grunt":false}}
