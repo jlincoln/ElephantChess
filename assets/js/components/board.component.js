@@ -276,7 +276,7 @@ parasails.registerComponent('board', {
             }
             checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
             if (checkmate) {
-              winner = (data.fen.split(' ')[1] === 'w') ? 'black' : 'white';
+              this.gameWinner = (data.fen.split(' ')[1] === 'w') ? 'black' : 'white';
               data.fen = this.$refs.echessboard.game.fen();
             } else {
               this.setBoardUnmovable();
@@ -289,7 +289,7 @@ parasails.registerComponent('board', {
           }
           checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
           if (checkmate) {
-            winner = (data.fen.split(' ')[1] === 'w') ? 'black' : 'white';
+            this.gameWinner = (data.fen.split(' ')[1] === 'w') ? 'black' : 'white';
             data.fen = this.$refs.echessboard.game.fen();
           } else {
             this.setBoardUnmovable();
