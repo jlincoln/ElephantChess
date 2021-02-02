@@ -51,7 +51,7 @@ parasails.registerComponent('board', {
   template: `
     <div :id="'board-component-div-' + id" :name="'board-component-div-' + name">
       <div class="panel panel-default">
-        <div class="panel-heading lead" :style="'background-color: ' + (activeColor.toUpperCase() === userSide.toUpperCase() && !winner ? 'lightgreen' : 'lightgrey') + '; border-color: black; text-align: left; padding-left: 2px;'">
+        <div class="panel-heading lead" :style="'background-color: ' + (activeColor.toUpperCase() === userSide.toUpperCase() && !gameWinner ? 'lightgreen' : 'lightgrey') + '; border-color: black; text-align: left; padding-left: 2px;'">
           <strong>{{name}}</strong>
             Opponent: <strong>{{ opponent }}</strong>
           <span v-if=gameMode>
@@ -61,7 +61,7 @@ parasails.registerComponent('board', {
             Turn: <strong>{{ activeColor.toUpperCase() === userSide.toUpperCase() ? 'You' : 'Opponent' }}</strong>
           </span>
           <span v-if=gameWinner>
-            Winner: <strong>{{ turn }}</strong>
+            Winner: <strong>{{ gameWinner.toUpperCase() === userSide.toUpperCase() ? 'You' : 'Opponent' }}</strong>
           </span>
         </div>
         <div v-if=userSide class="panel-heading" style="border-color: lightgrey; border-style: solid; border-width: thin; padding-left: 2px;">
@@ -250,8 +250,21 @@ parasails.registerComponent('board', {
 
     onMove: async function(data) {
 
+      this.activeColor = (data.fen.split(' ')[1] === 'w') ? 'White' : 'Black';
       let checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
       let winner = '';
+
+      if (checkmate && this.activeColor.toUpperCase() === this.userSide.toUpperCase()) {
+        // opponent is winner nothing to do but set game winner
+        this.gameWinner = (data.fen.split(' ')[1] === 'w') ? 'black' : 'white';
+        this.setBoardUnmovable();
+        return;
+      }
+
+      if (this.currentFen === data.fen && data['history'].length === 0) {
+        // return from extra onMove call
+        return;
+      }
 
       if (this.moveCapturedPiece() && !checkmate) {
 
@@ -263,8 +276,8 @@ parasails.registerComponent('board', {
             }
             checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
             if (checkmate) {
-              winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
-              data['fen'] = this.$refs.echessboard.game.fen();
+              winner = (data.fen.split(' ')[1] === 'w') ? 'black' : 'white';
+              data.fen = this.$refs.echessboard.game.fen();
             } else {
               this.setBoardUnmovable();
               return;
@@ -276,8 +289,8 @@ parasails.registerComponent('board', {
           }
           checkmate = (this.$refs.echessboard.game.in_checkmate() || this.$refs.echessboard.game.game_over());
           if (checkmate) {
-            winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
-            data['fen'] = this.$refs.echessboard.game.fen();
+            winner = (data.fen.split(' ')[1] === 'w') ? 'black' : 'white';
+            data.fen = this.$refs.echessboard.game.fen();
           } else {
             this.setBoardUnmovable();
             return;
@@ -293,20 +306,19 @@ parasails.registerComponent('board', {
         this.setBoardUnmovable();
       }
 
-      if (this.currentFen !== data['fen']) {
-        this.currentFen = data['fen'];
-        this.activeColor = (data['fen'].split(' ')[1] === 'w') ? 'White' : 'Black';
+      if (this.currentFen !== data.fen) {
+        this.currentFen = data.fen;
+        this.activeColor = (data.fen.split(' ')[1] === 'w') ? 'White' : 'Black';
       } else {
-        this.activeColor = (data['fen'].split(' ')[1] === 'w') ? 'White' : 'Black';
+        this.activeColor = (data.fen.split(' ')[1] === 'w') ? 'White' : 'Black';
         // move already posted
         return;
       }
 
-      let history = this.$refs.echessboard.game.history({verbose: true});
-      let moveText = (history[history.length-1]);
+      let moveText = [...data.history].pop();
 
       if (checkmate && winner === '') {
-        winner = (data['fen'].split(' ')[1] === 'w') ? 'black' : 'white';
+        winner = (data.fen.split(' ')[1] === 'w') ? 'black' : 'white';
       }
 
       let check = this.$refs.echessboard.game.in_check();
@@ -350,11 +362,11 @@ parasails.registerComponent('board', {
                 }
               }
             );
-          } else {
+          } else if (moveText) {
             io.socket.post('/api/v1/game/' + this.id + '/chat',
               {
                 _csrf: window.SAILS_LOCALS._csrf,
-                message: moveText.san,
+                message: moveText,
               },
               (resData, jwRes) => {
                 // console.log('onMove: check message: resData is ' + JSON.stringify(resData));
