@@ -27,7 +27,9 @@ module.exports = {
       throw {redirect: '/'};
     }
 
-    return {};
+    return {
+      currentSection: 'login'
+    };
 
   }
 

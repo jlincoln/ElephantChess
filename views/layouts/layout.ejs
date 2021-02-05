@@ -82,65 +82,85 @@
   </head>
   <body>
     <div purpose="page-wrap">
+
       <header id="page-header" class="navbar navbar-expand-sm flex-column flex-md-row justify-content-between" purpose="page-header">
+
         <a style="cursor: pointer;" class="navbar-brand mr-0" href="/"><img style="height: 30px;" class="logo" alt="Elephant Chess Logo" src="/images/elephantchesslogo.png"/></a>
-        <div class="navbar-nav flex-row">
-          <!-- LOGGED-IN NAVIGATION -->
-          <% if(me) { %>
-          <a class="nav-item nav-link ml-2 ml-md-0 mr-2 mr-md-0 <%= typeof currentSection !== 'undefined' && currentSection === 'games' ? 'current' : '' %>" href="/games">Games</a>
-          <div class="nav-item dropdown d-none d-sm-block">
-            <a class="nav-link dropdown-toggle" id="header-account-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-            <div style="left: auto; right: 0;" class="dropdown-menu" aria-labelledby="header-account-menu-link">
-              <a class="dropdown-item" href="/games-archived">Archived Games</a>
-            </div>
-          </div>
-          <a class="nav-item nav-link ml-2 ml-md-0 mr-2 mr-md-0 <%= typeof currentSection !== 'undefined' && currentSection === 'help' ? 'current' : '' %>" href="/contact">Help</a>
-          <a class="nav-item nav-link ml-2 ml-md-0 mr-2 mr-md-0 <%= typeof currentSection !== 'undefined' && currentSection === 'faq' ? 'current' : '' %>" href="/faq">Rules</a>
-          <!-- Only in desktop nav -->
-          <div class="nav-item dropdown d-none d-sm-block">
-            <a class="nav-link dropdown-toggle" id="header-account-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= me.fullName %></a>
-            <div style="left: auto; right: 0;" class="dropdown-menu" aria-labelledby="header-account-menu-link">
-              <a class="dropdown-item" href="/account">Settings</a>
-              <a class="dropdown-item" href="/logout">Sign out</a>
-              <% if (me.isSuperAdmin) { %>
-                <div class="dropdown-divider"></div>
-                <h6 class="dropdown-header">Admistration</h6>
-                <a class="dropdown-item" href="/admin/accounts">Accounts</a>
-                <a class="dropdown-item" href="/admin/notices">Notices</a>
+
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+              <% if (me) { %>
+
+                <!-- LOGGED-IN NAVIGATION -->
+                <li class="nav-item <%= typeof currentSection !== 'undefined' && currentSection === 'games' ? 'active' : '' %>">
+                  <a class="nav-link" href="/games">Games</a>
+                </li>
+
+                <div class="nav-item dropdown d-none d-sm-block">
+                  <a class="nav-link dropdown-toggle" id="header-account-menu-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                  <div style="left: auto; right: 0;" class="dropdown-menu" aria-labelledby="header-account-menu-link">
+                    <a class="dropdown-item" href="/games-archived">Archived Games</a>
+                  </div>
+                </div>
+
+                <li class="nav-item <%= typeof currentSection !== 'undefined' && currentSection === 'faq' ? 'active' : '' %>">
+                  <a class="nav-link" href="/faq">Rules</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link <%= typeof currentSection !== 'undefined' && currentSection === 'help' ? 'active' : '' %>" href="/contact">Help</a>
+                </li>
+
+                <li class="nav-item dropdown <%= typeof currentSection !== 'undefined' && currentSection === 'account' ? 'active' : '' %>">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= me.fullName %></a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/account">Settings</a>
+                    <a class="dropdown-item" href="/logout">Sign out</a>
+
+                    <% if (me.isSuperAdmin) { %>
+                      <div class="dropdown-divider"></div>
+                      <h6 class="dropdown-header">Admistration</h6>
+                      <a class="dropdown-item" href="/admin/accounts">Accounts</a>
+                      <a class="dropdown-item" href="/admin/notices">Notices</a>
+                    <% } %>
+
+                  </div>
+                </li>
+
+              <% } else { %>
+
+                <!-- LOGGED-OUT NAVIGATION -->
+                <a class="nav-item nav-link ml-2 ml-md-0 mr-2 <%= typeof currentSection !== 'undefined' && currentSection === 'faq' ? 'active' : '' %>" href="/faq">FAQ</a>
+                <a class="nav-item nav-link ml-2 ml-md-0 mr-2 <%= typeof currentSection !== 'undefined' && currentSection === 'login' ? 'active' : '' %>" href="/login">Log in</a>
+                <div class="form-inline d-none ml-2 d-md-block" >
+                  <a class="btn btn-outline-info" href="/signup">Sign up</a>
+                </div>
+
               <% } %>
-            </div>
+            </ul>
           </div>
-          <!-- Only in mobile nav -->
-          <a class="nav-item nav-link ml-2 mr-2 d-block d-sm-none" href="/games">Games</a>
-          <a class="nav-item nav-link ml-2 mr-2 d-block d-sm-none" href="/account">Account Settings</a>
-          <a class="nav-item nav-link ml-2 mr-2 d-block d-sm-none" href="/logout">Sign out</a>
-          <% } else { %>
-          <!-- LOGGED-OUT NAVIGATION -->
-          <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/faq">FAQ</a>
-          <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/login">Log in</a>
-          <!-- Only in desktop nav -->
-          <div class="form-inline d-none ml-2 d-md-block" >
-            <a class="btn btn-outline-info" href="/signup">Sign up</a>
-          </div>
-          <!-- Only in mobile nav -->
-          <a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup">Sign up</a>
-          <% } %>
-        </div>
+        </nav>
       </header>
 
       <!-- Alert if email has not been confirmed -->
-      <% if(me&&me.emailChangeCandidate) { %>
-      <div class="container-fluid">
-        <div class="alert alert-secondary mt-2" role="alert">
-        Your updated email address needs verification. Until you click the link sent to <strong><%= me.emailChangeCandidate %></strong>, you'll still need to sign in as <strong><%= me.emailAddress %></strong>.
+      <% if (me&&me.emailChangeCandidate) { %>
+        <div class="container-fluid">
+          <div class="alert alert-secondary mt-2" role="alert">
+          Your updated email address needs verification. Until you click the link sent to <strong><%= me.emailChangeCandidate %></strong>, you'll still need to sign in as <strong><%= me.emailAddress %></strong>.
+          </div>
         </div>
-      </div>
-      <% } else if(me&&me.emailStatus === 'unconfirmed') { %>
-      <div class="container-fluid">
-        <div class="alert alert-secondary mt-2" role="alert">
-        Your email address still needs verification. Your account access may be limited until you click the link sent to <strong><%= me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress%></strong>.
+      <% } else if (me&&me.emailStatus === 'unconfirmed') { %>
+        <div class="container-fluid">
+          <div class="alert alert-secondary mt-2" role="alert">
+          Your email address still needs verification. Your account access may be limited until you click the link sent to <strong><%= me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress%></strong>.
+          </div>
         </div>
-      </div>
       <% } %>
 
       <%- body %>
