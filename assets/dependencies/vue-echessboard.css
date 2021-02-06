@@ -4,6 +4,20 @@
  * You need to include the css files in themes folder in order to have the
  * board and pieces displayed!
  */
+cg-container {
+  position: absolute;
+  width: 800%;
+  height: 800%;
+  display: block;
+  bottom: 0;
+}
+cg-helper {
+  position: absolute;
+  width: 12.5%;
+  padding-bottom: 12.5%;
+  display: table;
+  bottom: 0;
+}
 .cg-board-wrap {
   width: 320px;
   height: 320px;
@@ -139,8 +153,9 @@ piece.fading {
 .cg-board-wrap coords.ranks coord {
   transform: translateY(39%);
 }
-
-
+* {
+  boxing
+}
 /* THEME CUSTOMIZATION*/
 /*
  * Board
