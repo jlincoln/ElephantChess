@@ -153,9 +153,6 @@ piece.fading {
 .cg-board-wrap coords.ranks coord {
   transform: translateY(39%);
 }
-* {
-  boxing
-}
 /* THEME CUSTOMIZATION*/
 /*
  * Board
