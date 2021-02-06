@@ -8,7 +8,7 @@
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/lodash": "^3.10.3",
     "add-to-homescreen": "^3.2.6",
-    "aws-sdk": "^2.814.0",
+    "aws-sdk": "^2.839.0",
     "grunt": "1.0.4",
     "sails": "^1.2.5",
     "sails-hook-apianalytics": "^2.0.3",
@@ -23,7 +23,7 @@
     "eslint": "5.16.0",
     "htmlhint": "0.11.0",
     "lesshint": "6.3.6",
-    "vue-echessboard": "^0.0.18"
+    "vue-echessboard": "^0.0.19"
   },
   "scripts": {
     "start": "node app.js",
