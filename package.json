@@ -1,7 +1,7 @@
 {
   "name": "elephant-chess",
   "private": true,
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Elephant Chess",
   "keywords": [],
   "dependencies": {
