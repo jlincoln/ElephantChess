@@ -261,8 +261,12 @@ parasails.registerComponent('board', {
         return;
       }
 
-      if (this.currentFen === data.fen && data['history'].length === 0) {
+      if (this.currentFen === data.fen
+        && data['history'].length === 0
+        && this.$refs.echessboard.board.state.movable.color.toUpperCase() !== this.userSide.toUpperCase())
+      {
         // return from extra onMove call
+        this.setBoardUnmovable();
         return;
       }
 
