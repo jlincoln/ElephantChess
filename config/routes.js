@@ -81,5 +81,6 @@ module.exports.routes = {
   'POST  /api/v1/game/:id/unarchive':                    { action: 'game/unarchive' },
   'POST  /api/v1/admin/create-notice':                   { action: 'admin/create-notice' },
   'POST  /api/v1/admin/update-notice':                   { action: 'admin/update-notice' },
+  'POST  /api/v1/send-move-reminder-notifications':      { action: 'send-move-reminder-notifications' },
 
 };

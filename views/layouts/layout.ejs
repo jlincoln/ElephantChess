@@ -117,7 +117,7 @@
                   <a class="nav-link <%= typeof currentSection !== 'undefined' && currentSection === 'help' ? 'active' : '' %>" href="/contact">Help</a>
                 </li>
 
-                <li class="nav-item dropdown <%= typeof currentSection !== 'undefined' && currentSection === 'account' ? 'active' : '' %>">
+                <li class="nav-item dropdown <%= (typeof currentSection !== 'undefined') && (currentSection === 'account' || currentSection === 'accounts' || currentSection === 'notices') ? 'active' : '' %>">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= me.fullName %></a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="/account">Settings</a>

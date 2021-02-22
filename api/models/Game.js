@@ -77,5 +77,57 @@ module.exports = {
     }
   },
 
+  lastMoveTimeStamp: async function(game) {
+    let lastGameMove = await Move.find(
+      {
+        where: {
+          game: game.id
+        },
+        sort: 'createdAt desc',
+        limit: 1
+      },
+    );
+
+    if (!lastGameMove[0]) { return; }
+
+    return lastGameMove[0].createdAt;
+  },
+
+  currentTurnPlayer: async function(game) {
+    let currentPlayerId = (game.currentFEN.split(' ')[1] === 'w') ? game.white : game.black;
+
+    let currentPlayer = await User.findOne(
+      {
+        where: {
+          id: currentPlayerId
+        }
+      },
+    );
+
+    return {
+      emailAddress: currentPlayer.emailAddress,
+      name: currentPlayer.fullName,
+      alias: currentPlayer.alias,
+    };
+  },
+
+  notCurrentTurnPlayer: async function(game) {
+    let currentPlayerId = (game.currentFEN.split(' ')[1] !== 'w') ? game.white : game.black;
+
+    let currentPlayer = await User.findOne(
+      {
+        where: {
+          id: currentPlayerId
+        }
+      },
+    );
+
+    return {
+      emailAddress: currentPlayer.emailAddress,
+      name: currentPlayer.fullName,
+      alias: currentPlayer.alias,
+    };
+  },
+
 };
 
