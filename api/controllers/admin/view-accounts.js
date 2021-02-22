@@ -35,7 +35,8 @@ module.exports = {
 
     // Respond with view.
     return {
-      users: users
+      users: users,
+      currentSection: 'accounts'
     };
 
   }

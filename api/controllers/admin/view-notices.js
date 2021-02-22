@@ -22,7 +22,8 @@ module.exports = {
 
     // Respond with view.
     return {
-      notices: notices
+      notices: notices,
+      currentSection: 'notices'
     };
 
   }
