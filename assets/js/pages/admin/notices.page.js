@@ -17,6 +17,7 @@ parasails.registerPage('notices', {
       level: 'everyone',
       active: false
     },
+    moveHoursWaiting: 24,
     syncing: false,
   },
 

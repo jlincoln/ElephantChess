@@ -38,6 +38,7 @@ module.exports = {
       {
         where: {
           winner: '',
+          archived: false
         }
       }
     );
@@ -47,17 +48,18 @@ module.exports = {
     let gameNotifications = [];
 
     for (let openGame of openGames) {
-      let lastMoveTimeStamp = await Game.lastMoveTimeStamp(openGame);
+      let lastMove = await Game.lastMove(openGame);
 
-      sails.log('lastMoveTimeStamp is ', lastMoveTimeStamp);
+      // sails.log(`lastMove is ${JSON.stringify(lastMove)}`);
 
-      if (lastMoveTimeStamp > Date.now() - 24*3600000
-      && Date.now() - lastMoveTimeStamp > hours*3600000)
+      if (lastMove && !lastMove.reminderNotificationSent
+        && (Date.now() - lastMove.createdAt) > hours*3600000)
       {
         let currentTurnPlayer = await Game.currentTurnPlayer(openGame);
         let notCurrentTurnPlayer = await Game.notCurrentTurnPlayer(openGame);
         gameNotifications.push(
           {
+            moveId: lastMove.id,
             emailAddress: currentTurnPlayer.emailAddress,
             name: currentTurnPlayer.name,
             opponentAlias: notCurrentTurnPlayer.alias
@@ -67,9 +69,9 @@ module.exports = {
 
     }
 
-    if (!gameNotifications.length === 0) { return; }
+    // sails.log(`gameNotifications is ${JSON.stringify(gameNotifications)}`);
 
-    sails.log(`gameNotifications is ${JSON.stringify(gameNotifications)}`);
+    if (!gameNotifications.length === 0) { return; }
 
     for (let gameNotification of gameNotifications) {
       await sails.helpers.sendTemplateEmail.with({
@@ -82,6 +84,15 @@ module.exports = {
           opponentAlias: gameNotification.opponentAlias,
         }
       });
+
+      await Move.update(
+        {
+          id: gameNotification.moveId
+        },
+        {
+          reminderNotificationSent: true
+        }
+      );
     }
 
     return;

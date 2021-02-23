@@ -77,7 +77,7 @@ module.exports = {
     }
   },
 
-  lastMoveTimeStamp: async function(game) {
+  lastMove: async function(game) {
     let lastGameMove = await Move.find(
       {
         where: {
@@ -88,9 +88,7 @@ module.exports = {
       },
     );
 
-    if (!lastGameMove[0]) { return; }
-
-    return lastGameMove[0].createdAt;
+    return lastGameMove[0];
   },
 
   currentTurnPlayer: async function(game) {

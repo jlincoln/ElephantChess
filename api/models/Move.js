@@ -19,6 +19,12 @@ module.exports = {
       description: 'move information'
     },
 
+    reminderNotificationSent: {
+      type: 'boolean',
+      required: false,
+      description: 'indicates if a reminder notification has been sent or not'
+    },
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
