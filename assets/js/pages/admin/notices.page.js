@@ -55,6 +55,14 @@ parasails.registerPage('notices', {
       return;
     },
 
+    sentMoveReminderNotifications(event) {
+      if (event === 'OK') {
+        alert('Notifications sent!', event);
+      } else {
+        alert('Notifications NOT sent! An error occurred.', event);
+      }
+    },
+
     showCreateNoticeForm() {
       this.creatingOrUpdatingNotice = true;
       this.noticeDef = {

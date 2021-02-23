@@ -49,9 +49,9 @@
     <div class="title page-header text-center">
       <h1>Send Move Reminder Notifications</h1>
       <div class="header-buttons">
-        <ajax-form action="sendMoveReminderNotifications" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{hoursSinceLastMove: moveHoursWaiting}">
+        <ajax-form action="sendMoveReminderNotifications" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{hoursSinceLastMove: moveHoursWaiting}" @submitted="sentMoveReminderNotifications($event)">
           <input type="number" min="1" max="99" id="moveHoursWaiting" size="2" class="" name="moveHoursWaiting" v-model="moveHoursWaiting" placeholder="24"> Hours Waiting
-          <ajax-button type="submit" :syncing="syncing" class="btn btn-primary ml-1">Send</ajax-button>
+          <ajax-button type="submit" :syncing="syncing" class="btn btn-outline-primary ml-1">Send</ajax-button>
         </ajax-form>
       </div>
       <br>
