@@ -74,7 +74,7 @@ module.exports = {
       opponents = await User.find({
         id: {'!=': this.req.session.userId},
         isDisabled: false,
-      });
+      }).sort('alias asc');
 
       _.each(opponents, (opponent, index) => {
         opponents[index] = _.pick(opponent, ['id','alias']);
