@@ -76,7 +76,6 @@ module.exports = {
     for (let gameNotification of gameNotifications) {
       await sails.helpers.sendTemplateEmail.with({
         to: gameNotification.emailAddress,
-        toName: gameNotification.name,
         subject: 'Elephant Chess Move Reminder',
         template: 'email-move-reminder',
         templateData: {
