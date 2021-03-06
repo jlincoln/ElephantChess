@@ -50,26 +50,10 @@ module.exports = {
       isEmail: true,
     },
 
-    toName: {
-      description: 'Name of the primary recipient as displayed in their inbox.',
-      example: 'Nola Thacker',
-    },
-
     subject: {
       description: 'The subject of the email.',
       example: 'Hello there.',
       defaultsTo: ''
-    },
-
-    from: {
-      description: 'An override for the default "from" email that\'s been configured.',
-      example: 'anne.martin@example.com',
-      isEmail: true,
-    },
-
-    fromName: {
-      description: 'An override for the default "from" name.',
-      example: 'Anne Martin',
     },
 
     layout: {
@@ -79,31 +63,9 @@ module.exports = {
       custom: (layout)=>layout===false || _.isString(layout)
     },
 
-    ensureAck: {
-      description: 'Whether to wait for acknowledgement (to hear back) that the email was successfully sent (or at least queued for sending) before returning.',
-      extendedDescription: 'Otherwise by default, this returns immediately and delivers the request to deliver this email in the background.',
-      type: 'boolean',
-      defaultsTo: false
-    },
-
     bcc: {
       description: 'The email addresses of recipients secretly copied on the email.',
       example: ['jahnna.n.malcolm@example.com'],
-    },
-
-    attachments: {
-      description: 'Attachments to include in the email, with the file content encoded as base64.',
-      whereToGet: {
-        description: 'If you have `sails-hook-uploads` installed, you can use `sails.reservoir` to get an attachment into the expected format.',
-      },
-      example: [
-        {
-          contentBytes: 'iVBORw0KGgoAA…',
-          name: 'sails.png',
-          type: 'image/png',
-        }
-      ],
-      defaultsTo: [],
     },
 
   },
@@ -122,7 +84,7 @@ module.exports = {
   },
 
 
-  fn: async function({template, templateData, to, toName, subject, from, fromName, layout, ensureAck, bcc, attachments}) {
+  fn: async function({template, templateData, to, subject, layout, bcc}) {
 
     var path = require('path');
     var url = require('url');
@@ -251,7 +213,8 @@ module.exports = {
       // Create sendEmail params
       var params = {
         Destination: { /* required */
-          ToAddresses: [ to ]
+          ToAddresses: [ to ],
+          BccAddresses: bcc,
         },
         Message: { /* required */
           Body: { /* required */

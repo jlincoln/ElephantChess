@@ -33,6 +33,12 @@ module.exports = {
       description: 'Indicates if the notice is active or not.'
     },
 
+    sendEmail: {
+      type: 'boolean',
+      required: true,
+      description: 'Indicates if the notice is sent via email or not.'
+    },
+
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝

@@ -16,6 +16,7 @@
           <th class="th-sm">Created</th>
           <th class="th-sm">Level</th>
           <th class="th-sm">Active</th>
+          <th class="th-sm">Send Email</th>
           <th class="th-sm">Title</th>
           <th class="th-sm">Message</th>
           <th class="th-sm">Updated</th>
@@ -27,6 +28,7 @@
           <td>{{showLocalTime(notice.createdAt)}}</td>
           <td>{{notice.level}}</td>
           <td><input type="checkbox" v-model="notice.active" disabled></td>
+          <td><input type="checkbox" v-model="notice.sendEmail" disabled></td>
           <td>{{notice.title}}</td>
           <td>{{notice.message}}</td>
           <td>{{showLocalTime(notice.updatedAt)}}</td>
@@ -38,6 +40,7 @@
           <th class="th-sm">Created</th>
           <th class="th-sm">Level</th>
           <th class="th-sm">Active</th>
+          <th class="th-sm">Send Email</th>
           <th class="th-sm">Title</th>
           <th class="th-sm">Message</th>
           <th class="th-sm">Updated</th>
@@ -64,7 +67,7 @@
     <div class="modal-header">
       <h5 class="modal-title">{{createOrUpdateNoticeFormTitle}}</h5>
     </div>
-    <ajax-form :action="(noticeDef.id) ? 'updateNotice': 'createNotice'" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{id: noticeDef.id, title: noticeDef.title, message: noticeDef.message, level: noticeDef.level, active: noticeDef.active}" @submitted="submittedCreateOrUpdateNoticeForm($event)" v-if="!createOrUpdateNoticeFormSuccess">
+    <ajax-form :action="(noticeDef.id) ? 'updateNotice': 'createNotice'" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{id: noticeDef.id, title: noticeDef.title, message: noticeDef.message, level: noticeDef.level, active: noticeDef.active, sendEmail: noticeDef.sendEmail}" @submitted="submittedCreateOrUpdateNoticeForm($event)" v-if="!createOrUpdateNoticeFormSuccess">
       <div class="modal-body">
         <label class="">
           Level
@@ -76,6 +79,11 @@
         <label>
           Active
           <input type="checkbox" id="active" class="" name="active" v-model="noticeDef.active">
+        </label>
+        <br>
+        <label>
+          Send Email
+          <input type="checkbox" id="sendEmail" class="" name="sendEmail" v-model="noticeDef.sendEmail">
         </label>
         <br>
         <label>

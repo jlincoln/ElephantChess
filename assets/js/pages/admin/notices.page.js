@@ -15,7 +15,8 @@ parasails.registerPage('notices', {
       title: '',
       message: '',
       level: 'everyone',
-      active: false
+      active: false,
+      sendEmail: false
     },
     moveHoursWaiting: 24,
     syncing: false,
@@ -70,7 +71,8 @@ parasails.registerPage('notices', {
         id: undefined,
         title: '',
         level: 'everyone',
-        message: ''
+        message: '',
+        sendEmail: false
       };
       this.createOrUpdateNoticeFormTitle = 'Create Notice';
       return;
