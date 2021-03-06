@@ -69,18 +69,22 @@ module.exports = {
         emailAddresses.push(user.emailAddress);
       }
 
-      if (emailAddresses.length > 50) {
+      // AWS documentation says no more than 50 but we will do batches of 25
+      const batchSize = 25;
+      if (emailAddresses.length > batchSize) {
 
         while (emailAddresses.length > 0) {
 
           let emailAddressesBatch = [];
 
-          for (let i = 0; i < 50; i++) {
-            if (!emailAddresses[i]) {
+          for (let i = 0; i < batchSize; i++) {
+            if (emailAddresses.length === 0) {
               break;
             }
             emailAddressesBatch.push(emailAddresses.pop());
           }
+
+          sails.log(`emailAddressesBatch.length is ${emailAddressesBatch.length}`);
 
           await sails.helpers.sendTemplateEmail.with({
             to: 'noreply@elephantchess.net',
