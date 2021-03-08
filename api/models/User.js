@@ -176,6 +176,13 @@ without necessarily having a billing card.`
       example: '{ invisible: true }'
     },
 
+    rating: {
+      type: 'number',
+      description: 'rating',
+      example: '2670',
+      defaultsTo: 0
+    },
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝

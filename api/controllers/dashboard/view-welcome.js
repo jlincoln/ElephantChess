@@ -51,12 +51,23 @@ module.exports = {
       }
     });
 
+    let user = await User.findOne({id: this.req.session.userId});
+
+    let higherRatedUsers = await User.find(
+      {
+        isDisabled: false,
+        emailStatus: 'confirmed',
+        rating: {'>': user.rating}
+      }
+    );
+
     let statistics = {
       gamesPlayed: gamesPlayed,
       gamesPlaying: gamesPlaying,
       gamesWon: gamesWon,
       gamesLost: gamesLost,
-      siteRank: 'Not Available'
+      siteRating: user.rating,
+      siteRanking: user.emailStatus !== 'confirmed' ? 'please confirm your email' : higherRatedUsers.length + 1
     };
 
     return {

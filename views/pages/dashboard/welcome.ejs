@@ -20,11 +20,36 @@
     <br>
     <div>
       <h3>Your Statistics</h3>
-      <h5>Games Playing: <%= statistics.gamesPlaying %></h5>
-      <h5>Games Played: <%= statistics.gamesPlayed %></h5>
-      <h5>Games Won: <%= statistics.gamesWon %></h5>
-      <h5>Games Lost: <%= statistics.gamesLost %></h5>
-      <h5>Site Rank: <%= statistics.siteRank %></h5>
+      <table class="table">
+        <thead>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Active Games</td>
+            <td><%= statistics.gamesPlaying %></td>
+          </tr>
+          <tr>
+            <td>Completed Games</td>
+            <td><%= statistics.gamesPlayed %></td>
+          </tr>
+          <tr>
+            <td>Won Games</td>
+            <td><%= statistics.gamesWon %></td>
+          </tr>
+          <tr>
+            <td>Lost Games</td>
+            <td><%= statistics.gamesLost %></td>
+          </tr>
+          <tr>
+            <td>Site Rating</td>
+            <td><%= statistics.siteRating %></td>
+          </tr>
+          <tr>
+            <td>Site Ranking</td>
+            <td><%= statistics.siteRanking %></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 

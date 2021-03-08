@@ -26,8 +26,6 @@ module.exports = {
 
   fn: async function (inputs) {
 
-    sails.log.info('move: inputs is ', inputs);
-
     if (!this.req.isSocket) {
       return this.res.badRequest();
     }
@@ -46,7 +44,49 @@ module.exports = {
       return this.res.notFound();
     }
 
-    let createdMove = await Move.create({ move: { 'fen': inputs.fen }, game: inputs.id }).fetch();
+    if (inputs.winner) {
+      // calculate players' rating
+
+      let winnerUserId = (inputs.winner === 'white') ? updatedGame.white : updatedGame.black;
+      let loserUserId = (inputs.winner === 'white') ? updatedGame.black : updatedGame.white;
+
+      let winnerUser = await User.findOne({id: winnerUserId});
+      let loserUser = await User.findOne({id: loserUserId});
+
+      let winnerNewRating;
+      let loserNewRating;
+
+      if (loserUser.rating <= 0) {
+        winnerNewRating = winnerUser.rating + 1;
+        loserNewRating = 0;
+      } else if (loserUser.rating === winnerUser.rating) {
+        winnerNewRating = winnerUser.rating + 1;
+        loserNewRating = loserUser.rating - 1;
+      } else if (loserUser.rating > winnerUser.rating) {
+        // winner beat a higher rated player so give them more points from the loser
+        let diff = Math.abs(loserUser.rating - winnerUser.rating);
+        let diffPercentOfLoser = diff/loserUser.rating;
+        winnerNewRating = winnerUser.rating + Math.ceil(diff * diffPercentOfLoser);
+        loserNewRating = loserUser.rating - Math.ceil(diff * diffPercentOfLoser);
+      } else if (loserUser.rating < winnerUser.rating) {
+        // winner beat a lower rated player so give them less points from the loser
+        let diff = Math.abs(loserUser.rating - winnerUser.rating);
+        let diffPercentOfWinner = diff/winnerUser.rating;
+        winnerNewRating = winnerUser.rating + Math.ceil(diff * diffPercentOfWinner);
+        loserNewRating = loserUser.rating - Math.ceil(diff * diffPercentOfWinner);
+      }
+
+      await User.updateOne(
+        {id: winnerUserId},
+        {rating: winnerNewRating}
+      );
+      await User.updateOne(
+        {id: loserUserId},
+        {rating: loserNewRating}
+      );
+    }
+
+    await Move.create({ move: { 'fen': inputs.fen }, game: inputs.id }).fetch();
 
     // broadcast to move websocket game specific room to other connected sessions
     let roomName = `game:${inputs.id}`;
@@ -56,6 +96,5 @@ module.exports = {
     return;
 
   }
-
 
 };
