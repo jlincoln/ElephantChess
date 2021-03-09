@@ -77,7 +77,7 @@ module.exports = {
       }).sort('alias asc');
 
       _.each(opponents, (opponent, index) => {
-        opponents[index] = _.pick(opponent, ['id','alias']);
+        opponents[index] = _.pick(opponent, ['id','alias','rating']);
       });
 
       // set activeColor attribute based upon segment 2 of FEN

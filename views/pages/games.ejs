@@ -57,9 +57,9 @@
     <ajax-form action="createGame" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{name: newGameDef.name, side: newGameDef.side, opponent: newGameDef.opponent, timeLimit: newGameDef.timeLimit, mode: newGameDef.mode}" @submitted="submittedCreateGameForm($event)" v-if="!createGameFormSuccess">
       <div class="modal-body">
         <label class="">
-          Opponent:
+          Opponent (rating): 
           <select id="opponent" v-model="newGameDef.opponent" class="" required>
-            <option v-for="opponent in opponents" v-bind:value="opponent.id">{{opponent.alias}}</option>
+            <option v-for="opponent in opponents" v-bind:value="opponent.id">{{opponent.alias + ' (' + opponent.rating + ')'}}</option>
           </select>
         </label>
         <br>
@@ -78,7 +78,7 @@
         </label>
         <br>
         <label>
-          Side:
+          Side: 
           <div class="radio-inline">
             <label>
               <input type="radio" id="white" class="" checked name="side" value="white" v-model="newGameDef.side">
@@ -90,8 +90,8 @@
             </label>
           </div>
         </label>
-        <br>
         <!--
+        <br>
         <label>
           Time Limit (hours):
           <div class="checkbox">
@@ -101,8 +101,10 @@
         </label>
         -->
         <br>
-        <label for="name" class="">Name:<label>
-        <input type="text" id="name" class="" name="name" v-model="newGameDef.name" placeholder="Name your new game">
+        <label>
+          Name:
+          <input type="text" id="name" class="" name="name" v-model="newGameDef.name" placeholder="Name your new game">
+        </label>
         <p class="text-danger" v-if="cloudError"><small>An error occured while processing your request. Please check your information and try again, or <a href="/support">contact support</a> if the error persists.</small></p>
       </div>
       <div class="modal-footer  flex-row-reverse justify-content-start">
