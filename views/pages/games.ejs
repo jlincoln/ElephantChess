@@ -56,12 +56,8 @@
     </div>
     <ajax-form action="createGame" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{name: newGameDef.name, side: newGameDef.side, opponent: newGameDef.opponent, timeLimit: newGameDef.timeLimit, mode: newGameDef.mode}" @submitted="submittedCreateGameForm($event)" v-if="!createGameFormSuccess">
       <div class="modal-body">
-        <label class="">
-          Opponent (rating): 
-          <select id="opponent" v-model="newGameDef.opponent" class="" required>
-            <option v-for="opponent in opponents" v-bind:value="opponent.id">{{opponent.alias + ' (' + opponent.rating + ')'}}</option>
-          </select>
-        </label>
+        Opponent (rating): 
+        <v-select id="opponent" :options="opponents" label="aliasPlusRating" :reduce="opponent => opponent.id" v-model="newGameDef.opponent" required></v-select>
         <br>
         <label>
           Type:

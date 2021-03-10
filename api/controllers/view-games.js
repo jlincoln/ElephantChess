@@ -78,10 +78,12 @@ module.exports = {
 
       _.each(opponents, (opponent, index) => {
         opponents[index] = _.pick(opponent, ['id','alias','rating']);
+        opponents[index].aliasPlusRating = `${opponents[index].alias} (${opponents[index].rating})`;
       });
 
       // set activeColor attribute based upon segment 2 of FEN
       _.each(games, (game, index) => {
+        sails.log(`games[index] is ${JSON.stringify(games[index])}`);
         games[index].activeColor = game.currentFEN.split(' ')[1];
         games[index].userId = this.req.session.userId;
         if (game.white.id === this.req.session.userId) {

@@ -241,7 +241,9 @@
         'mixins',
         'extends',
         'provide',
-        'inject'
+        'inject',
+        'staticRenderFns',
+        '_compiled'
       ];
       // FUTURE: change this to a case-insensitive check to do a better job helping
       // out a user who is trying to use e.g. "beforemount", without a capital "M"
