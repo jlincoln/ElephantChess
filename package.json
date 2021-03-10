@@ -16,7 +16,8 @@
     "sails-hook-organics": "^2.0.0",
     "sails-hook-orm": "^2.1.1",
     "sails-hook-sockets": "^2.0.0",
-    "sails-postgresql": "^2.0.0"
+    "sails-postgresql": "^2.0.0",
+    "vue-select": "^3.11.2"
   },
   "devDependencies": {
     "@vue/cli": "^4.5.6",
