@@ -34,7 +34,7 @@ module.exports = {
   fn: async function (inputs) {
 
     // All done.
-    sails.log('create-game inputs is ', inputs);
+    // sails.log.info('create-game inputs is ', inputs);
     // sails.log.info('this.req.session.userId is ', this.req.session.userId);
     let gameParams = {};
     gameParams.currentFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
