@@ -26,7 +26,8 @@
               show-threats="false"
               :user-side="game.userSide"
               :opponent="game.opponent"
-              :winner="game.winner">
+              :winner="game.winner"
+              :elephant-piece-type="game.elephantPieceType">
             </board>
           </div>
         </div>
@@ -54,7 +55,7 @@
     <div class="modal-header">
       <h5 class="modal-title">Create Game</h5>
     </div>
-    <ajax-form action="createGame" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{name: newGameDef.name, side: newGameDef.side, opponent: newGameDef.opponent, timeLimit: newGameDef.timeLimit, mode: newGameDef.mode}" @submitted="submittedCreateGameForm($event)" v-if="!createGameFormSuccess">
+    <ajax-form action="createGame" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="{name: newGameDef.name, side: newGameDef.side, opponent: newGameDef.opponent, timeLimit: newGameDef.timeLimit, mode: newGameDef.mode, elephantPieceType: elephantPieceType}" @submitted="submittedCreateGameForm($event)" v-if="!createGameFormSuccess">
       <div class="modal-body">
         Opponent (rating): 
         <v-select id="opponent" :options="opponents" label="aliasPlusRating" :reduce="opponent => opponent.id" v-model="newGameDef.opponent" required></v-select>
@@ -69,6 +70,11 @@
             <label>
               <input type="radio" id="catch_and_release" class="" name="mode" value="catch_and_release" v-model="newGameDef.mode">
               Catch and Release
+            </label>
+            <br>
+            <label>
+              Covid
+              <input type="checkbox" id="covid" class="" name="covid" v-model="newGameDef.covid">
             </label>
           </div>
         </label>
