@@ -40,6 +40,12 @@ module.exports = {
       description: 'Indicates if the game is archived or not'
     },
 
+    elephantPieceType: {
+      type: 'string',
+      defaultsTo: 'normal',
+      description: 'specify the type of piece to use as the elephant pieces'
+    },
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
