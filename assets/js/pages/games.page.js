@@ -18,9 +18,21 @@ parasails.registerPage('games', {
       opponent: undefined,
       enableTimeLimit: undefined,
       timeLimit: undefined,
+      covid: false,
     },
     opponents: [],
     syncing: false,
+  },
+
+  computed: {
+    elephantPieceType: function() {
+      console.log(`this.newGameDef.covid is ${this.newGameDef.covid}`);
+      if (this.newGameDef.covid) {
+        return 'covid';
+      } else {
+        return 'normal';
+      }
+    }
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -55,7 +67,6 @@ parasails.registerPage('games', {
 
     var filterEl = document.getElementById('filter');
     filterEl.focus(); // set focus to filter element
-
 
   },
 
