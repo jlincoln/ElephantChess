@@ -25,6 +25,10 @@ module.exports = {
       type: 'number',
       description: 'time limit for game',
     },
+    elephantPieceType: {
+      type: 'string',
+      description: 'specify the type of pieces used for the elephant piece',
+    },
   },
 
   exits: {
@@ -48,6 +52,7 @@ module.exports = {
     gameParams.mode = inputs.mode;
     gameParams.timeLimit = inputs.timeLimit;
     gameParams.name = inputs.name;
+    gameParams.elephantPieceType = inputs.elephantPieceType;
 
     let creator = await User.findOne({id: this.req.session.userId});
 
