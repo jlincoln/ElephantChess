@@ -28,11 +28,11 @@ module.exports = {
     var games;
     var opponents;
 
-    sails.log(`req is ${JSON.stringify(req)}`);
+    // sails.log(`req is ${JSON.stringify(req)}`);
 
     // Get the set of games
     if (req.playerId) {
-      sails.log(`req.playerId is ${JSON.stringify(req.playerId)}`);
+      // sails.log(`req.playerId is ${JSON.stringify(req.playerId)}`);
       this.req.playerId = req.playerId;
       games = await Game.find({
         // archived: false,
@@ -83,7 +83,7 @@ module.exports = {
 
       // set activeColor attribute based upon segment 2 of FEN
       _.each(games, (game, index) => {
-        sails.log(`games[index] is ${JSON.stringify(games[index])}`);
+        // sails.log(`games[index] is ${JSON.stringify(games[index])}`);
         games[index].activeColor = game.currentFEN.split(' ')[1];
         games[index].userId = this.req.session.userId;
         if (game.white.id === this.req.session.userId) {
