@@ -15,6 +15,7 @@ parasails.registerComponent('board', {
   //  ╩  ╩╚═╚═╝╩  ╚═╝
   props: [
     'archived',
+    'elephantPieceType',
     'fen',
     'free',
     'id',
@@ -24,7 +25,7 @@ parasails.registerComponent('board', {
     'orientation',
     'showThreats',
     'userSide',
-    'winner'
+    'winner',
   ],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -37,6 +38,7 @@ parasails.registerComponent('board', {
       activeColor: activeColor,
       archivedGame: this.archived,
       currentFen: this.fen,
+      boardComponentClass: (this.elephantPieceType === 'covid') ? 'covid-board' : '',
       gameWinner: this.winner,
       gameMode: this.mode.charAt(0).toUpperCase() + this.mode.slice(1).replace(/_/g,' '),
       // gameOrientation: this.mode.orientation || 'white',
@@ -49,7 +51,7 @@ parasails.registerComponent('board', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-    <div :id="'board-component-div-' + id" :name="'board-component-div-' + name">
+    <div :id="'board-component-div-' + id" :name="'board-component-div-' + name" :class="boardComponentClass">
       <div class="panel panel-default">
         <div class="panel-heading lead" :style="'background-color: ' + (activeColor.toUpperCase() === userSide.toUpperCase() && !gameWinner ? 'lightgreen' : 'lightgrey') + '; border-color: black; text-align: left; padding-left: 2px;'">
           <strong>{{name}}</strong>
