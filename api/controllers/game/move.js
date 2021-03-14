@@ -53,12 +53,11 @@ module.exports = {
       let winnerUser = await User.findOne({id: winnerUserId});
       let loserUser = await User.findOne({id: loserUserId});
 
-      let winnerNewRating;
-      let loserNewRating;
+      let winnerNewRating = 0;
+      let loserNewRating = 0;
 
       if (loserUser.rating <= 0) {
         winnerNewRating = winnerUser.rating + 1;
-        loserNewRating = 0;
       } else if (loserUser.rating === winnerUser.rating) {
         winnerNewRating = winnerUser.rating + 1;
         loserNewRating = loserUser.rating - 1;
