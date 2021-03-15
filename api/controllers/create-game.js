@@ -32,7 +32,10 @@ module.exports = {
   },
 
   exits: {
-
+    noOpponent: {
+      description: 'No opponent was specified.',
+      responseType: 'badRequest'
+    }
   },
 
   fn: async function (inputs) {
@@ -40,6 +43,10 @@ module.exports = {
     // All done.
     // sails.log.info('create-game inputs is ', inputs);
     // sails.log.info('this.req.session.userId is ', this.req.session.userId);
+    if (!inputs.opponent) {
+      throw 'noOpponent';
+    }
+
     let gameParams = {};
     gameParams.currentFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     if (inputs.side === 'white') {
