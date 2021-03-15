@@ -179,7 +179,7 @@ without necessarily having a billing card.`
     rating: {
       type: 'number',
       description: 'rating',
-      example: '2670',
+      example: 2670,
       defaultsTo: 0
     },
 
