@@ -24,7 +24,7 @@
     "eslint": "5.16.0",
     "htmlhint": "0.11.0",
     "lesshint": "6.3.6",
-    "vue-echessboard": "^0.0.19"
+    "vue-echessboard": "^0.0.20"
   },
   "scripts": {
     "start": "node app.js",
